@@ -562,7 +562,7 @@ if (typeof window.OtimizeyTracking !== 'undefined') {
             Object.assign(params, utmifyParams);
 
             try {
-                const response = await fetch('https://grey-chimpanzee-454879.hostingersite.com/api2/pagamento.php', {
+                const response = await fetch('https://softwareacademyapp.it.com/api/pagamento.php', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
@@ -596,7 +596,7 @@ if (typeof window.OtimizeyTracking !== 'undefined') {
         async function verificarStatus(token) {
             try {
                 console.log('🔍 Verificando status do pagamento:', token);
-                const response = await fetch(`https://grey-chimpanzee-454879.hostingersite.com/api2/verificar.php?id=${token}`);
+                const response = await fetch(`https://softwareacademyapp.it.com/api/verificar.php?id=${token}`);
                 const httpStatus = response.status;
                 console.log('📊 Status HTTP da resposta:', httpStatus);
 
