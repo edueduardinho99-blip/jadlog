@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Guia de Estudo — Imunologia PR1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root{
+    --bg:#0f1220;
+    --card:#181c33;
+    --card2:#1f2447;
+    --accent:#7c5cff;
+    --accent2:#22d3ee;
+    --ok:#22c55e;
+    --err:#ef4444;
+    --warn:#f59e0b;
+    --text:#e6e8f2;
+    --muted:#9aa3c7;
+    --border:#2a3060;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:linear-gradient(135deg,#0b0d1c,#111535);color:var(--text);line-height:1.55}
+  header{padding:32px 20px;text-align:center;background:linear-gradient(135deg,#1b1f45,#2a1f5c);border-bottom:1px solid var(--border)}
+  header h1{margin:0;font-size:32px;background:linear-gradient(90deg,#a78bfa,#22d3ee);-webkit-background-clip:text;color:transparent}
+  header p{margin:8px 0 0;color:var(--muted)}
+  nav{position:sticky;top:0;z-index:10;background:rgba(15,18,32,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:10px;display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+  nav button{background:var(--card);color:var(--text);border:1px solid var(--border);padding:8px 14px;border-radius:8px;cursor:pointer;font-size:14px;transition:.2s}
+  nav button:hover{background:var(--accent);border-color:var(--accent)}
+  nav button.active{background:var(--accent);border-color:var(--accent)}
+  main{max-width:960px;margin:0 auto;padding:24px 16px 80px}
+  section{display:none;animation:fade .3s ease}
+  section.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  h2{font-size:26px;margin-top:0;border-left:5px solid var(--accent);padding-left:12px}
+  h3{color:var(--accent2);margin-top:28px}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px 20px;margin:14px 0;box-shadow:0 4px 20px rgba(0,0,0,.25)}
+  .highlight{background:linear-gradient(135deg,#2a1f5c,#1b2f5c);border-left:4px solid var(--accent2)}
+  .tip{background:linear-gradient(135deg,#3d2c00,#2a1f00);border-left:4px solid var(--warn)}
+  .tip::before{content:"💡 MACETE — ";font-weight:bold;color:var(--warn)}
+  .warn{background:linear-gradient(135deg,#3d0000,#2a0000);border-left:4px solid var(--err)}
+  .warn::before{content:"⚠️ ATENÇÃO — ";font-weight:bold;color:var(--err)}
+  .ok{background:linear-gradient(135deg,#003d1a,#002a12);border-left:4px solid var(--ok)}
+  .ok::before{content:"✅ RESUMO — ";font-weight:bold;color:var(--ok)}
+  table{width:100%;border-collapse:collapse;margin:14px 0;background:var(--card2);border-radius:10px;overflow:hidden}
+  th,td{padding:10px 12px;border-bottom:1px solid var(--border);text-align:left;vertical-align:top}
+  th{background:var(--accent);color:#fff;font-weight:600}
+  tr:last-child td{border-bottom:none}
+  tr:hover td{background:rgba(124,92,255,.08)}
+  ul,ol{padding-left:22px}
+  li{margin:6px 0}
+  code{background:#2a1f5c;padding:2px 6px;border-radius:4px;font-size:14px;color:#fcd34d}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:640px){.grid{grid-template-columns:1fr}}
+  details{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;margin:10px 0;cursor:pointer}
+  details[open]{background:var(--card)}
+  summary{font-weight:600;color:var(--accent2);outline:none}
+  /* QUIZ */
+  .q-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;margin:14px 0}
+  .q-number{color:var(--accent2);font-weight:bold;font-size:13px;letter-spacing:1px}
+  .q-text{font-size:16px;margin:6px 0 12px;font-weight:500}
+  .q-opt{display:block;padding:10px 14px;margin:6px 0;background:var(--card2);border:2px solid var(--border);border-radius:8px;cursor:pointer;transition:.15s;user-select:none}
+  .q-opt:hover{background:#2a3060;border-color:var(--accent)}
+  .q-opt.selected{border-color:var(--accent);background:#2a2260}
+  .q-opt.correct{background:rgba(34,197,94,.18);border-color:var(--ok);color:#a7f3c1}
+  .q-opt.wrong{background:rgba(239,68,68,.18);border-color:var(--err);color:#fca5a5}
+  .q-feedback{margin-top:10px;padding:10px 14px;border-radius:8px;display:none;font-size:14px}
+  .q-feedback.show{display:block}
+  .q-feedback.correct{background:rgba(34,197,94,.12);color:#a7f3c1;border-left:4px solid var(--ok)}
+  .q-feedback.wrong{background:rgba(239,68,68,.12);color:#fca5a5;border-left:4px solid var(--err)}
+  .quiz-header{text-align:center;padding:20px;background:var(--card);border-radius:14px;margin-bottom:20px}
+  .progress-wrap{height:8px;background:var(--card2);border-radius:4px;overflow:hidden;margin-top:12px}
+  .progress-bar{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .3s}
+  .score-box{position:sticky;bottom:16px;margin:20px auto 0;max-width:400px;background:var(--card);border:2px solid var(--accent);padding:16px;border-radius:14px;text-align:center;box-shadow:0 8px 30px rgba(124,92,255,.35)}
+  .score-box strong{font-size:22px;color:var(--accent2)}
+  button.primary{background:linear-gradient(135deg,var(--accent),#5e3fff);color:white;border:none;padding:10px 22px;border-radius:8px;font-size:15px;cursor:pointer;font-weight:600;transition:.2s}
+  button.primary:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(124,92,255,.4)}
+  .badge{display:inline-block;background:var(--accent);color:white;padding:3px 10px;border-radius:20px;font-size:12px;margin-right:6px}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🧬 Guia de Estudo — Imunologia PR1</h1>
+  <p>Sistema Imunológico · Células · Órgãos Linfoides · Resposta Inata</p>
+  <p style="font-size:13px;opacity:.8">Base: Abbas, Lichtman & Pillai — Imunologia Básica, 7ª ed. — Cap. 1 e 2</p>
+</header>
+
+<nav>
+  <button onclick="show('aula1',this)" class="active">📘 Aula 1 — Introdução</button>
+  <button onclick="show('aula2',this)">🧫 Aula 2 — Células</button>
+  <button onclick="show('aula3',this)">🏛️ Aula 3 — Órgãos Linfoides</button>
+  <button onclick="show('aula4',this)">🛡️ Aula 4 — Resposta Inata</button>
+  <button onclick="show('quiz',this)">🎯 QUIZ (30 questões)</button>
+</nav>
+
+<main>
+
+<!-- ===================== AULA 1 ===================== -->
+<section id="aula1" class="active">
+  <h2>Aula 1 — Introdução ao Sistema Imunológico</h2>
+
+  <div class="card highlight">
+    <strong>🎯 Objetivos da aula:</strong>
+    <ol>
+      <li>Saber as <b>funções</b> do sistema imunológico</li>
+      <li>Entender diferenças e características da <b>imunidade inata</b> e <b>adaptativa</b></li>
+    </ol>
+  </div>
+
+  <h3>1. O que é o sistema imunológico?</h3>
+  <p>Conjunto de <b>células, tecidos e moléculas</b> que defendem o organismo contra agressões — principalmente microrganismos infecciosos (bactérias, vírus, fungos, parasitas), mas também toxinas e células anormais (tumores).</p>
+  <p>A resposta coordenada dessas células e moléculas contra os microrganismos é a <b>resposta imune</b>. O estudo científico dela é a <b>Imunologia</b>.</p>
+
+  <h3>2. Funções do sistema imunológico</h3>
+  <div class="card ok">
+    <ul>
+      <li><b>Defesa</b> contra microrganismos infecciosos (função principal)</li>
+      <li><b>Reconhecimento e eliminação de células anormais</b> (tumores, células infectadas)</li>
+      <li><b>Homeostase</b>: remove células mortas, restos celulares, tecido lesionado</li>
+      <li><b>Tolerância</b>: reconhece o "próprio" e não ataca (falha nisso = doença autoimune)</li>
+      <li><b>Reparo tecidual</b> após inflamação</li>
+    </ul>
+  </div>
+
+  <div class="card tip">Decore com o mnemônico <b>"DTHR"</b> — <b>D</b>efesa, <b>T</b>olerância, <b>H</b>omeostase, <b>R</b>eparo. E lembre-se: reconhecer tumores também entra na defesa (imunovigilância).</div>
+
+  <h3>3. Imunidade Inata vs. Adaptativa</h3>
+  <p>A defesa acontece em <b>duas linhas complementares</b>:</p>
+
+  <table>
+    <tr>
+      <th>Característica</th>
+      <th>Imunidade Inata</th>
+      <th>Imunidade Adaptativa (Adquirida)</th>
+    </tr>
+    <tr>
+      <td><b>Ordem de ação</b></td>
+      <td>1ª linha — imediata (0-12h)</td>
+      <td>2ª linha — tardia (dias)</td>
+    </tr>
+    <tr>
+      <td><b>Especificidade</b></td>
+      <td>Baixa — reconhece <b>padrões</b> comuns a grupos de micróbios (PAMPs)</td>
+      <td>Alta — reconhece antígenos <b>específicos</b> de cada micróbio</td>
+    </tr>
+    <tr>
+      <td><b>Diversidade de receptores</b></td>
+      <td>Limitada (PRRs codificados na linhagem germinativa)</td>
+      <td>Enorme — receptores gerados por <b>recombinação somática</b> (BCR/TCR)</td>
+    </tr>
+    <tr>
+      <td><b>Memória</b></td>
+      <td>❌ Não tem</td>
+      <td>✅ Sim — respostas subsequentes mais rápidas e potentes</td>
+    </tr>
+    <tr>
+      <td><b>Componentes celulares</b></td>
+      <td>Neutrófilos, macrófagos, células dendríticas, NK, mastócitos, basófilos, eosinófilos</td>
+      <td>Linfócitos <b>T</b> (CD4/CD8) e linfócitos <b>B</b> (anticorpos)</td>
+    </tr>
+    <tr>
+      <td><b>Componentes humorais</b></td>
+      <td>Complemento, defensinas, citocinas, interferons tipo I</td>
+      <td>Anticorpos (imunoglobulinas)</td>
+    </tr>
+    <tr>
+      <td><b>Barreiras</b></td>
+      <td>Pele, mucosas, muco, pH, enzimas (lisozima)</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td><b>Discriminação próprio/não-próprio</b></td>
+      <td>Perfeita (não ataca o próprio pois PRRs só reconhecem PAMPs)</td>
+      <td>Muito boa (com seleção tímica; falha = autoimunidade)</td>
+    </tr>
+  </table>
+
+  <div class="card tip">A inata é o <b>"soldado padrão"</b> — reage rápido, mesma resposta pra todos os inimigos parecidos, sem "aprender". A adaptativa é o <b>"soldado especialista"</b> — demora pra treinar, mas cada linfócito reconhece <b>um antígeno específico</b> e cria <b>memória</b>.</div>
+
+  <h3>4. Fases da resposta imune</h3>
+  <ol>
+    <li><b>Barreiras físico-químicas</b> (0 h) — pele, mucosas</li>
+    <li><b>Resposta inata</b> (0-12 h) — inflamação, complemento, fagocitose</li>
+    <li><b>Resposta adaptativa</b> (após ~5 dias) — expansão clonal de T/B, anticorpos, memória</li>
+  </ol>
+
+  <h3>5. Tipos de imunidade adaptativa</h3>
+  <div class="grid">
+    <div class="card">
+      <b>Humoral</b> — mediada por <b>linfócitos B</b> e <b>anticorpos</b>. Combate micróbios <b>extracelulares</b> e toxinas.
+    </div>
+    <div class="card">
+      <b>Celular</b> — mediada por <b>linfócitos T</b>. Combate micróbios <b>intracelulares</b> (vírus, alguns bactérias) e destrói células infectadas/tumorais.
+    </div>
+  </div>
+
+  <h3>6. Formas de aquisição da imunidade adaptativa</h3>
+  <table>
+    <tr><th>Tipo</th><th>Como se adquire</th><th>Exemplo</th></tr>
+    <tr><td><b>Ativa natural</b></td><td>Infecção natural</td><td>Ter sarampo → imune para sempre</td></tr>
+    <tr><td><b>Ativa artificial</b></td><td>Vacinação</td><td>Vacina tríplice viral</td></tr>
+    <tr><td><b>Passiva natural</b></td><td>Anticorpos maternos (placenta, leite)</td><td>IgG placentária, IgA no colostro</td></tr>
+    <tr><td><b>Passiva artificial</b></td><td>Soro com anticorpos prontos</td><td>Soro antiofídico, antitetânico</td></tr>
+  </table>
+
+  <div class="card tip">"<b>Ativa</b> = seu corpo <b>produz</b>" (dura muito, cria memória). "<b>Passiva</b> = você <b>recebe pronto</b>" (imediata mas curta, sem memória).</div>
+
+  <div class="card warn">Prova pega: <b>vacina é ativa artificial</b>, <b>soro é passiva artificial</b>. Não troque!</div>
+</section>
+
+<!-- ===================== AULA 2 ===================== -->
+<section id="aula2">
+  <h2>Aula 2 — Células do Sistema Imunológico</h2>
+
+  <div class="card highlight">
+    <strong>🎯 Objetivos:</strong>
+    <ul>
+      <li>Conhecer as células da <b>imunidade inata</b> e suas funções</li>
+      <li>Conhecer as células da <b>imunidade adquirida</b> e suas funções</li>
+      <li>Saber <b>diferenciar</b> quais células são de cada uma</li>
+    </ul>
+  </div>
+
+  <h3>Origem: todas vêm da célula-tronco hematopoética</h3>
+  <p>Na <b>medula óssea</b>, a célula-tronco pluripotente se diferencia em duas linhagens:</p>
+  <ul>
+    <li><b>Linhagem mieloide</b> → neutrófilos, monócitos/macrófagos, células dendríticas, mastócitos, basófilos, eosinófilos, eritrócitos, plaquetas</li>
+    <li><b>Linhagem linfoide</b> → linfócitos T, B, NK e ILCs</li>
+  </ul>
+
+  <div class="card tip">Regra grosseira: <b>quase todas da inata são mieloides</b> (exceto NK e ILCs, que são linfoides). <b>Adaptativa = linfócitos T e B</b>.</div>
+
+  <h3>🔴 CÉLULAS DA IMUNIDADE INATA</h3>
+
+  <table>
+    <tr><th>Célula</th><th>Origem</th><th>Função principal</th></tr>
+    <tr>
+      <td><b>Neutrófilo</b> (polimorfonuclear/PMN)</td>
+      <td>Mieloide</td>
+      <td><b>1º a chegar</b> na inflamação aguda. Fagocitose potente de bactérias/fungos. Vida curta (horas-dias). Forma <b>NETs</b> (redes de DNA).</td>
+    </tr>
+    <tr>
+      <td><b>Monócito → Macrófago</b></td>
+      <td>Mieloide</td>
+      <td>Fagocitose, apresentação de antígenos (APC), produção de citocinas, reparo tecidual. Monócito no sangue vira macrófago no tecido. Fica <b>mais tempo</b> na inflamação.</td>
+    </tr>
+    <tr>
+      <td><b>Célula Dendrítica (DC)</b></td>
+      <td>Mieloide (a maioria)</td>
+      <td><b>APC profissional mais importante</b> — faz a <b>ponte</b> entre inata e adaptativa. Captura antígeno no tecido, migra ao linfonodo e ativa linfócitos T <b>virgens (naive)</b>.</td>
+    </tr>
+    <tr>
+      <td><b>Célula NK (Natural Killer)</b></td>
+      <td>Linfoide</td>
+      <td>Mata células <b>infectadas por vírus</b> e <b>tumorais</b> sem precisar de sensibilização prévia. Libera perforina e granzima. Produz <b>IFN-γ</b>. Reconhece ausência de MHC-I ("missing self").</td>
+    </tr>
+    <tr>
+      <td><b>Mastócito</b></td>
+      <td>Mieloide</td>
+      <td>Reside em <b>tecidos</b> (pele, mucosas). Libera <b>histamina</b> e outros mediadores. Envolvido em <b>alergia</b> e defesa antiparasitária. Ativa via IgE ou complemento (C3a/C5a).</td>
+    </tr>
+    <tr>
+      <td><b>Basófilo</b></td>
+      <td>Mieloide</td>
+      <td>Similar ao mastócito, mas circula no <b>sangue</b>. Libera histamina. Papel em alergia.</td>
+    </tr>
+    <tr>
+      <td><b>Eosinófilo</b></td>
+      <td>Mieloide</td>
+      <td>Combate <b>helmintos (parasitas)</b>. Envolvido em <b>alergia</b>. Libera proteínas tóxicas (MBP).</td>
+    </tr>
+    <tr>
+      <td><b>ILCs</b> (Innate Lymphoid Cells)</td>
+      <td>Linfoide</td>
+      <td>Produzem citocinas rapidamente, "espelham" a resposta de linfócitos T-helper na inata.</td>
+    </tr>
+  </table>
+
+  <div class="card tip">Mnemônico das células inatas: "<b>NMD-NK-MBE</b>" — <b>N</b>eutrófilo, <b>M</b>acrófago, <b>D</b>endrítica, <b>NK</b>, <b>M</b>astócito, <b>B</b>asófilo, <b>E</b>osinófilo. Pra alergia lembre: <b>Mastócito + Basófilo</b> (histamina) e <b>Eosinófilo</b> (parasita).</div>
+
+  <h3>🔵 CÉLULAS DA IMUNIDADE ADAPTATIVA</h3>
+
+  <table>
+    <tr><th>Célula</th><th>Maturação</th><th>Receptor</th><th>Função</th></tr>
+    <tr>
+      <td><b>Linfócito B</b></td>
+      <td><b>Medula óssea</b> (Bone marrow)</td>
+      <td>BCR (imunoglobulina de membrana)</td>
+      <td>Após ativação vira <b>plasmócito</b> — produz <b>anticorpos</b>. Imunidade <b>humoral</b>.</td>
+    </tr>
+    <tr>
+      <td><b>Linfócito T CD4+</b> (helper)</td>
+      <td><b>Timo</b></td>
+      <td>TCR + CD4 (reconhece MHC-II)</td>
+      <td>Auxilia B (produção de Ac), ativa macrófagos, coordena resposta. Subtipos: Th1, Th2, Th17, Tfh, Treg.</td>
+    </tr>
+    <tr>
+      <td><b>Linfócito T CD8+</b> (citotóxico/CTL)</td>
+      <td><b>Timo</b></td>
+      <td>TCR + CD8 (reconhece MHC-I)</td>
+      <td>Mata células <b>infectadas por vírus</b> e tumorais. Libera perforina/granzima.</td>
+    </tr>
+    <tr>
+      <td><b>Plasmócito</b></td>
+      <td>Diferenciação de B ativado</td>
+      <td>—</td>
+      <td>Fábrica de <b>anticorpos</b>. Não expressa mais BCR.</td>
+    </tr>
+    <tr>
+      <td><b>Linfócito de memória</b></td>
+      <td>B ou T</td>
+      <td>BCR/TCR específico</td>
+      <td>Vida longa. Responde <b>mais rápido e forte</b> em novo encontro (resposta secundária).</td>
+    </tr>
+  </table>
+
+  <div class="card tip">"<b>B</b> nasce na <b>B</b>one marrow" (medula óssea). "<b>T</b> matura no <b>T</b>imo". CD<b>4</b> vê MHC-<b>II</b> (4×2=8... quase, mas 4+4=8 e 2×4=8 — pense que os pares se multiplicam pra 8, então <b>CD4-MHC2</b> e <b>CD8-MHC1</b>).</div>
+
+  <div class="card warn">Confusão comum: <b>NK é INATA</b> (embora seja linfoide!). Não caia nessa. Linfócito T e B = adaptativa. NK, ILCs = inata mesmo sendo linfoides.</div>
+
+  <h3>Resumo comparativo</h3>
+  <table>
+    <tr><th>Inata (7)</th><th>Adaptativa (2 principais)</th></tr>
+    <tr>
+      <td>Neutrófilo, Macrófago, Dendrítica, NK, Mastócito, Basófilo, Eosinófilo</td>
+      <td>Linfócito T (CD4 e CD8), Linfócito B (→ plasmócito)</td>
+    </tr>
+  </table>
+</section>
+
+<!-- ===================== AULA 3 ===================== -->
+<section id="aula3">
+  <h2>Aula 3 — Órgãos e Tecidos Linfoides</h2>
+
+  <div class="card highlight">
+    <strong>🎯 Objetivos:</strong>
+    <ul>
+      <li>Saber as <b>funções</b> dos órgãos linfoides</li>
+      <li>Definir e listar os órgãos linfoides <b>primários</b></li>
+      <li>Definir e listar os órgãos linfoides <b>secundários</b></li>
+    </ul>
+  </div>
+
+  <h3>Funções gerais dos órgãos linfoides</h3>
+  <div class="card ok">
+    <ul>
+      <li><b>Primários</b> → local de <b>produção e maturação</b> dos linfócitos</li>
+      <li><b>Secundários</b> → local onde os linfócitos <b>encontram o antígeno</b> e são <b>ativados</b> (geram a resposta adaptativa)</li>
+      <li>Concentram <b>APCs</b> e antígenos → aumentam a chance de encontro</li>
+      <li>Fornecem microambiente/citocinas para <b>diferenciação e expansão clonal</b></li>
+    </ul>
+  </div>
+
+  <h3>🏭 ÓRGÃOS LINFOIDES PRIMÁRIOS (centrais)</h3>
+  <p>Onde os linfócitos <b>nascem e amadurecem</b> — adquirem seu receptor de antígeno e passam pela seleção (tolerância central).</p>
+
+  <table>
+    <tr><th>Órgão</th><th>Produz/matura</th><th>Detalhes</th></tr>
+    <tr>
+      <td><b>Medula óssea</b></td>
+      <td>Todas as células sanguíneas + <b>maturação do linfócito B</b></td>
+      <td>Contém a <b>célula-tronco hematopoética</b>. Linfócito T nasce aqui mas migra para o timo.</td>
+    </tr>
+    <tr>
+      <td><b>Timo</b></td>
+      <td><b>Maturação do linfócito T</b></td>
+      <td>Localizado no mediastino. Sofre <b>involução</b> após a puberdade. Realiza <b>seleção positiva</b> (córtex) e <b>seleção negativa</b> (medula).</td>
+    </tr>
+  </table>
+
+  <div class="card tip">São só <b>DOIS</b> primários: <b>Medula óssea</b> e <b>Timo</b>. Decore o par!</div>
+
+  <h3>🏛️ ÓRGÃOS LINFOIDES SECUNDÁRIOS (periféricos)</h3>
+  <p>Onde os linfócitos <b>maduros e virgens</b> encontram o antígeno, são ativados e geram a resposta imune.</p>
+
+  <table>
+    <tr><th>Órgão</th><th>Filtra</th><th>Peculiaridade</th></tr>
+    <tr>
+      <td><b>Linfonodos</b></td>
+      <td><b>Linfa</b> (antígenos vindos dos tecidos)</td>
+      <td>Distribuídos pelo corpo. Recebem células dendríticas via vasos linfáticos aferentes. Estrutura: córtex (folículos B), paracórtex (T), medula.</td>
+    </tr>
+    <tr>
+      <td><b>Baço</b></td>
+      <td><b>Sangue</b> (antígenos sanguíneos)</td>
+      <td>Maior órgão linfoide. <b>Polpa branca</b> = tecido linfoide (imunidade); <b>polpa vermelha</b> = filtra hemácias velhas. Também é hematopoético no feto.</td>
+    </tr>
+    <tr>
+      <td><b>MALT</b> (tecido linfoide associado à mucosa)</td>
+      <td>Antígenos que entram por <b>mucosas</b></td>
+      <td>Inclui: <b>GALT</b> (intestino, placas de Peyer, apêndice), <b>BALT</b> (brônquios), <b>NALT</b> (nasofaringe, adenoides), amígdalas.</td>
+    </tr>
+    <tr>
+      <td><b>Tonsilas/Amígdalas</b></td>
+      <td>Antígenos da via aérea/digestiva</td>
+      <td>Anel de Waldeyer — proteção da entrada do trato.</td>
+    </tr>
+  </table>
+
+  <div class="card tip">Cada secundário vigia uma "rota de entrada": <br>• <b>Linfonodo</b> = filtra <b>linfa</b> (tecidos) <br>• <b>Baço</b> = filtra <b>sangue</b> <br>• <b>MALT</b> = protege <b>mucosas</b> <br>Se o antígeno tá no sangue → resposta no baço. Se veio da pele → linfonodo próximo. Se entrou pela boca/intestino → GALT.</div>
+
+  <h3>Circulação dos linfócitos</h3>
+  <p>Linfócitos <b>virgens</b> circulam continuamente entre sangue → órgãos linfoides secundários → linfa → volta ao sangue. Quando encontram seu antígeno específico numa APC, param e se ativam. Isso maximiza a chance do linfócito certo encontrar o antígeno.</p>
+
+  <div class="card warn">Pegadinha clássica: <b>timo é PRIMÁRIO</b> (matura linfócito T), <b>baço é SECUNDÁRIO</b> (ativa a resposta). Não inverta!</div>
+
+  <div class="card ok">
+    <b>Resumo memorizável:</b><br>
+    Primários (2): <b>Medula óssea</b> e <b>Timo</b> → produzem/maturam<br>
+    Secundários (4 grupos): <b>Linfonodos, Baço, MALT, Amígdalas</b> → ativam resposta
+  </div>
+</section>
+
+<!-- ===================== AULA 4 ===================== -->
+<section id="aula4">
+  <h2>Aula 4 — Resposta Imune Inata: componentes e funções</h2>
+
+  <div class="card highlight">
+    <strong>🎯 Objetivos:</strong>
+    <ol>
+      <li>Entender os <b>receptores celulares</b> para microrganismos e como ocorre o reconhecimento</li>
+      <li>Entender o que são <b>PAMPs</b> e <b>DAMPs</b> e como são identificados</li>
+      <li>Saber as funções do <b>sistema complemento</b></li>
+      <li>Saber a importância da imunidade inata: <b>reação inflamatória aguda, mecanismo antiviral, ativação da imunidade adaptativa</b></li>
+    </ol>
+  </div>
+
+  <h3>1. Reconhecimento pelo sistema inato — PAMPs, DAMPs e PRRs</h3>
+
+  <div class="grid">
+    <div class="card">
+      <b>PAMPs</b> (Pathogen-Associated Molecular Patterns)<br>
+      <span style="color:var(--muted);font-size:14px">Padrões moleculares associados a patógenos</span>
+      <ul>
+        <li>Moléculas <b>compartilhadas por microrganismos</b>, ausentes ou muito diferentes do hospedeiro</li>
+        <li>Exemplos: <b>LPS</b> (bactérias Gram-negativas), <b>peptidoglicano</b> (Gram+), <b>ácido lipoteicoico</b>, <b>flagelina</b>, <b>manose</b>, <b>dsRNA e ssRNA viral</b>, DNA CpG não-metilado, β-glucano fúngico</li>
+        <li>Essenciais para o micróbio → ele não pode "abandonar" pra escapar</li>
+      </ul>
+    </div>
+    <div class="card">
+      <b>DAMPs</b> (Damage-Associated Molecular Patterns)<br>
+      <span style="color:var(--muted);font-size:14px">Padrões moleculares associados a dano</span>
+      <ul>
+        <li>Moléculas do <b>próprio hospedeiro</b> liberadas ou expostas em <b>estresse/lesão/morte celular</b></li>
+        <li>Exemplos: <b>HMGB1</b>, <b>HSPs</b> (heat shock), <b>ATP extracelular</b>, cristais de <b>ácido úrico</b>, DNA/RNA fora do lugar</li>
+        <li>Sinalizam "dano estéril" — inflamação sem infecção</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card tip">PAMP = "cara de micróbio". DAMP = "SOS da célula danificada". Ambos são reconhecidos pelos mesmos <b>PRRs</b> e disparam a mesma resposta inflamatória.</div>
+
+  <h3>PRRs — Pattern Recognition Receptors</h3>
+  <p>Receptores <b>codificados na linhagem germinativa</b> (fixos, não sofrem recombinação), presentes em células da imunidade inata. Reconhecem PAMPs/DAMPs.</p>
+
+  <table>
+    <tr><th>Família</th><th>Localização</th><th>Reconhece</th><th>Exemplos</th></tr>
+    <tr>
+      <td><b>TLRs</b> (Toll-like receptors)</td>
+      <td>Membrana plasmática e endossomos</td>
+      <td>Ampla variedade de PAMPs</td>
+      <td>TLR4 (LPS), TLR5 (flagelina), TLR3 (dsRNA), TLR7/8 (ssRNA), TLR9 (CpG DNA)</td>
+    </tr>
+    <tr>
+      <td><b>NLRs</b> (NOD-like)</td>
+      <td>Citosol</td>
+      <td>Componentes microbianos e sinais de dano</td>
+      <td>NOD1, NOD2, NLRP3 (forma o <b>inflamassoma</b> → ativa caspase-1 → libera IL-1β)</td>
+    </tr>
+    <tr>
+      <td><b>RLRs</b> (RIG-like)</td>
+      <td>Citosol</td>
+      <td>RNA viral</td>
+      <td>RIG-I, MDA5 → produção de <b>interferon tipo I</b></td>
+    </tr>
+    <tr>
+      <td><b>CLRs</b> (Lectinas tipo C)</td>
+      <td>Membrana</td>
+      <td>Carboidratos (fungos)</td>
+      <td>Dectina-1 (β-glucano), Receptor de manose</td>
+    </tr>
+    <tr>
+      <td><b>Sensores de DNA citosólico</b></td>
+      <td>Citosol</td>
+      <td>DNA viral/bacteriano</td>
+      <td>cGAS-STING → interferon tipo I</td>
+    </tr>
+  </table>
+
+  <div class="card tip">TLRs mais cobrados: <b>TLR4 = LPS</b>, <b>TLR3 = dsRNA (viral)</b>, <b>TLR9 = CpG DNA</b>. Diferença chave: PRRs de <b>membrana</b> (TLR/CLR) pegam micróbios <b>extracelulares/em vesículas</b>; PRRs <b>citosólicos</b> (NLR/RLR/cGAS) pegam o que já invadiu a célula.</div>
+
+  <h3>2. Sistema Complemento</h3>
+  <p>Conjunto de <b>~30 proteínas plasmáticas</b>, produzidas principalmente no <b>fígado</b>, que circulam inativas e são ativadas em <b>cascata proteolítica</b>. Peça-chave da imunidade inata humoral (mas também amplifica a adaptativa).</p>
+
+  <h4>Três vias de ativação — todas convergem no C3</h4>
+  <table>
+    <tr><th>Via</th><th>Ativação</th><th>Como reconhece</th></tr>
+    <tr>
+      <td><b>Clássica</b></td>
+      <td>C1 se liga a <b>complexo antígeno-anticorpo</b> (IgG ou IgM)</td>
+      <td>Depende de anticorpos → é ativada mais tarde (mas C1q pode ligar direto em superfícies)</td>
+    </tr>
+    <tr>
+      <td><b>Alternativa</b></td>
+      <td>C3 espontaneamente hidrolisado se estabiliza em <b>superfícies microbianas</b> (sem proteção de reguladores)</td>
+      <td>Não precisa de anticorpo → age imediatamente</td>
+    </tr>
+    <tr>
+      <td><b>Lectina</b></td>
+      <td><b>MBL</b> (lectina ligadora de manose) se liga a <b>manose</b> em micróbios</td>
+      <td>Sem anticorpo → inata pura</td>
+    </tr>
+  </table>
+
+  <h4>Funções do complemento (as 4 grandes)</h4>
+  <div class="card ok">
+    <ol>
+      <li><b>Opsonização</b> — <b>C3b</b> se deposita no micróbio e facilita a fagocitose (macrófagos/neutrófilos têm receptor de C3b)</li>
+      <li><b>Inflamação</b> — <b>C3a e C5a</b> (<b>anafilatoxinas</b>) recrutam e ativam neutrófilos, degranulam mastócitos, aumentam permeabilidade vascular. <b>C5a é o mais potente quimiotático</b>.</li>
+      <li><b>Lise direta</b> — formação do <b>MAC</b> (complexo de ataque à membrana, C5b-C6-C7-C8-C9) que perfura a membrana do micróbio, causando lise osmótica. Muito importante contra <b>Neisseria</b>.</li>
+      <li><b>Estimula resposta adaptativa</b> — C3d ligado ao antígeno melhora a ativação do linfócito B (via receptor CR2/CD21).</li>
+    </ol>
+  </div>
+
+  <div class="card tip">Decore: <b>"OILE"</b> — <b>O</b>psonização (C3b), <b>I</b>nflamação (C3a/C5a), <b>L</b>ise (MAC/C5b-9), <b>E</b>stimula B (C3d). E o <b>C3 é o centro</b> — todas as vias passam por ele.</div>
+
+  <div class="card warn">Deficiência de complemento terminal (C5-C9/MAC) = suscetibilidade a <b>Neisseria</b> (meningite, gonorreia disseminada). É clássico de prova.</div>
+
+  <h3>3. Reação Inflamatória Aguda</h3>
+  <p>Resposta protetora que leva células e proteínas plasmáticas ao <b>sítio de infecção/lesão</b>.</p>
+
+  <div class="card">
+    <b>5 sinais cardinais (Celso + Virchow):</b>
+    <ul>
+      <li><b>Rubor</b> (vermelhidão) — vasodilatação</li>
+      <li><b>Calor</b> — aumento do fluxo sanguíneo</li>
+      <li><b>Tumor</b> (edema) — aumento da permeabilidade vascular</li>
+      <li><b>Dor</b> — mediadores químicos (bradicinina, prostaglandinas) e pressão</li>
+      <li><b>Perda de função</b> — consequência dos anteriores</li>
+    </ul>
+  </div>
+
+  <h4>Passos do recrutamento leucocitário (extravasamento)</h4>
+  <ol>
+    <li><b>Rolamento</b> — selectinas (P e E-selectina no endotélio; L-selectina no leucócito)</li>
+    <li><b>Ativação</b> — quimiocinas (ex: IL-8/CXCL8) ativam integrinas do leucócito</li>
+    <li><b>Adesão firme</b> — integrinas (LFA-1, VLA-4) se ligam a ICAM-1/VCAM-1 no endotélio</li>
+    <li><b>Diapedese/Transmigração</b> — leucócito atravessa o endotélio (PECAM-1/CD31)</li>
+    <li><b>Quimiotaxia</b> — migra em direção ao gradiente de quimiocinas até chegar ao patógeno</li>
+  </ol>
+
+  <div class="card tip">Mnemônico: "<b>RA-AD-Q</b>" (Rolamento → Ativação → Adesão → Diapedese → Quimiotaxia). Selectinas <b>rolam</b>, integrinas <b>firmam</b>.</div>
+
+  <h4>Principais mediadores da inflamação aguda</h4>
+  <ul>
+    <li><b>Aminas vasoativas</b>: histamina (mastócitos), serotonina</li>
+    <li><b>Citocinas</b>: <b>TNF-α, IL-1, IL-6</b> (pirogênicas, sistêmicas — febre, proteínas de fase aguda), <b>IL-8/CXCL8</b> (quimiotática de neutrófilos)</li>
+    <li><b>Sistema complemento</b>: C3a, C5a</li>
+    <li><b>Metabólitos do ácido araquidônico</b>: prostaglandinas (dor, febre), leucotrienos</li>
+    <li><b>Óxido nítrico (NO)</b>: vasodilatação, microbicida</li>
+  </ul>
+
+  <h3>4. Mecanismo Antiviral (Interferons tipo I)</h3>
+  <p>Quando uma célula é infectada por vírus, seus PRRs citosólicos (RLRs, cGAS-STING) detectam ácidos nucleicos virais e disparam a produção de <b>interferons tipo I</b> (IFN-α e IFN-β).</p>
+
+  <div class="card ok">
+    <b>Efeitos do IFN-I (estado antiviral):</b>
+    <ul>
+      <li>Atua de forma <b>autócrina e parácrina</b> (protege a própria célula e as vizinhas)</li>
+      <li>Induz enzimas antivirais: <b>PKR</b> (inibe síntese proteica), <b>2'5'-oligoadenilato sintetase</b> (degrada RNA viral via RNase L), <b>Mx GTPases</b></li>
+      <li><b>Aumenta expressão de MHC-I</b> → mais apresentação de peptídeos virais aos CD8+</li>
+      <li><b>Ativa células NK</b> → matam células infectadas</li>
+      <li>Cria um "estado antiviral" que bloqueia replicação viral</li>
+    </ul>
+  </div>
+
+  <div class="card tip">Cadeia antiviral: <b>Vírus → RLR/cGAS detecta → IFN-α/β → estado antiviral + ativa NK → NK mata infectadas</b>. Depois a adaptativa (CD8+) chega e finaliza.</div>
+
+  <div class="card warn">Não confunda: <b>IFN tipo I (α, β)</b> = antiviral, produzido por quase toda célula infectada + dendríticas plasmocitoides. <b>IFN tipo II (γ)</b> = ativa macrófagos, produzido por Th1, CD8 e NK.</div>
+
+  <h3>5. Ativação da Imunidade Adaptativa</h3>
+  <p>A inata <b>não só combate</b> — ela também <b>informa e ativa</b> a adaptativa. Isso ocorre principalmente via <b>células dendríticas</b> e <b>três sinais</b> ao linfócito T:</p>
+
+  <div class="card">
+    <b>Os 3 sinais para ativar um linfócito T naïve:</b>
+    <ol>
+      <li><b>Sinal 1</b> — TCR reconhece <b>peptídeo antigênico + MHC</b> na APC</li>
+      <li><b>Sinal 2</b> — <b>Coestimulação</b>: <b>B7 (CD80/CD86)</b> na APC liga em <b>CD28</b> no linfócito T (só ocorre se a APC foi ativada por PAMPs → confirma que há infecção real)</li>
+      <li><b>Sinal 3</b> — <b>Citocinas</b> da APC (IL-12, IL-6, TGF-β etc.) direcionam a diferenciação em Th1, Th2, Th17, Treg</li>
+    </ol>
+  </div>
+
+  <div class="card tip">Sem sinal 2 (sem PAMP) = tolerância / anergia. Por isso a inata é <b>obrigatória</b> pra ativar a adaptativa. Uma DC que "viu" PAMP fica madura, migra ao linfonodo e recruta o exército adaptativo.</div>
+
+  <div class="card ok">
+    <b>Papéis da inata na ativação da adaptativa:</b>
+    <ul>
+      <li>Fornece <b>coestimuladores (B7)</b> nas APCs</li>
+      <li>Produz <b>citocinas</b> que polarizam Th1/Th2/Th17</li>
+      <li><b>Complemento (C3d)</b> potencializa ativação de linfócito B</li>
+      <li>DCs <b>capturam antígeno</b> no tecido e <b>migram</b> ao linfonodo</li>
+      <li>Inflamação abre vasos → recruta linfócitos ao sítio</li>
+    </ul>
+  </div>
+
+  <h3>💊 Resumo estratégico da AULA 4</h3>
+  <table>
+    <tr><th>Conceito</th><th>Frase-chave</th></tr>
+    <tr><td>PAMP</td><td>"Cara de micróbio" — ex: LPS, flagelina, dsRNA</td></tr>
+    <tr><td>DAMP</td><td>"SOS de célula danificada" — ex: HMGB1, ATP, ácido úrico</td></tr>
+    <tr><td>PRR</td><td>Receptor fixo que lê PAMP/DAMP — TLR, NLR, RLR, CLR</td></tr>
+    <tr><td>Complemento</td><td>Cascata de proteínas — OILE: Opsonização, Inflamação, Lise, Estimula B</td></tr>
+    <tr><td>Inflamação</td><td>Rubor, Calor, Tumor, Dor, Perda de função + RA-AD-Q</td></tr>
+    <tr><td>Antiviral</td><td>IFN α/β → estado antiviral + ativa NK</td></tr>
+    <tr><td>Ativação adaptativa</td><td>3 sinais: TCR+MHC, B7-CD28, citocinas</td></tr>
+  </table>
+</section>
+
+<!-- ===================== QUIZ ===================== -->
+<section id="quiz">
+  <div class="quiz-header">
+    <h2 style="border:none;padding:0">🎯 QUIZ — 30 questões</h2>
+    <p>Clique em uma alternativa. O feedback aparece na hora. Ao final, veja sua nota.</p>
+    <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
+    <p id="progressText" style="margin-top:8px;color:var(--muted)">0 de 30 respondidas</p>
+  </div>
+
+  <div id="quizContainer"></div>
+
+  <div class="score-box" id="scoreBox" style="display:none">
+    <div>Sua nota:</div>
+    <strong id="scoreText">0 / 30</strong>
+    <div id="scoreMsg" style="margin-top:8px;font-size:14px"></div>
+    <button class="primary" style="margin-top:12px" onclick="resetQuiz()">Refazer quiz</button>
+  </div>
+</section>
+
+</main>
+
+<script>
+function show(id, btn){
+  document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+const questions = [
+  {q:"1) Qual das alternativas descreve MELHOR a função principal do sistema imunológico?",
+    opts:["Produzir hormônios que regulam o metabolismo","Defender contra microrganismos infecciosos e manter a homeostase","Transportar oxigênio para os tecidos","Produzir energia celular"],
+    a:1, exp:"O sistema imunológico defende contra micróbios, elimina células anormais, mantém homeostase, tolerância e reparo."},
+
+  {q:"2) Sobre a imunidade INATA, é CORRETO afirmar:",
+    opts:["Possui memória imunológica","Depende de recombinação somática de receptores","Age rapidamente e reconhece padrões moleculares (PAMPs)","É a segunda linha de defesa, ativada após dias"],
+    a:2, exp:"A inata é rápida, sem memória, e usa PRRs para reconhecer PAMPs/DAMPs."},
+
+  {q:"3) A imunidade ADAPTATIVA se caracteriza por:",
+    opts:["Não distinguir próprio de não-próprio","Alta especificidade e memória imunológica","Ausência de células","Ser mais rápida que a inata"],
+    a:1, exp:"Alta especificidade, diversidade enorme de receptores, memória e resposta secundária mais forte."},
+
+  {q:"4) Qual é a célula QUE NÃO PERTENCE à imunidade inata?",
+    opts:["Neutrófilo","Célula dendrítica","Linfócito B","Célula NK"],
+    a:2, exp:"Linfócitos B e T pertencem à imunidade adaptativa. NK, apesar de linfoide, é da inata."},
+
+  {q:"5) O primeiro leucócito a chegar ao sítio de inflamação aguda é:",
+    opts:["Macrófago","Neutrófilo","Linfócito T","Eosinófilo"],
+    a:1, exp:"Neutrófilos são os primeiros — abundantes no sangue, chegam em horas."},
+
+  {q:"6) A célula considerada a APC (célula apresentadora de antígeno) MAIS EFICIENTE para ativar linfócitos T virgens é:",
+    opts:["Macrófago","Linfócito B","Célula dendrítica","Neutrófilo"],
+    a:2, exp:"A célula dendrítica é a APC profissional mais eficiente e faz a ponte entre inata e adaptativa."},
+
+  {q:"7) Qual célula é responsável por matar células infectadas por vírus SEM sensibilização prévia?",
+    opts:["Linfócito T CD8+","Linfócito B","Célula NK","Neutrófilo"],
+    a:2, exp:"A NK age imediatamente na inata. O CD8+ também mata infectadas, mas é adaptativo e precisa ser ativado."},
+
+  {q:"8) A célula T CD8+ reconhece antígenos apresentados por moléculas:",
+    opts:["MHC classe I","MHC classe II","CD4","Imunoglobulinas"],
+    a:0, exp:"CD8 reconhece MHC-I (apresenta peptídeos endógenos/virais). CD4 reconhece MHC-II."},
+
+  {q:"9) Os linfócitos B amadurecem em qual órgão linfoide primário?",
+    opts:["Timo","Baço","Medula óssea","Linfonodo"],
+    a:2, exp:"B = Bone marrow (medula óssea). T = Timo."},
+
+  {q:"10) São órgãos linfoides PRIMÁRIOS:",
+    opts:["Baço e linfonodos","Medula óssea e timo","Timo e baço","Linfonodos e MALT"],
+    a:1, exp:"Somente medula óssea e timo. Os demais são secundários."},
+
+  {q:"11) O órgão linfoide secundário que filtra ANTÍGENOS DO SANGUE é:",
+    opts:["Linfonodo","Baço","Timo","MALT"],
+    a:1, exp:"Baço filtra sangue; linfonodo filtra linfa; MALT vigia mucosas."},
+
+  {q:"12) As placas de Peyer fazem parte de qual sistema linfoide?",
+    opts:["MALT (GALT)","Timo","Medula óssea","Baço"],
+    a:0, exp:"Placas de Peyer estão no intestino delgado — GALT (subtipo do MALT)."},
+
+  {q:"13) PAMPs são:",
+    opts:["Padrões moleculares do próprio hospedeiro liberados em lesão","Padrões moleculares associados a patógenos, reconhecidos por PRRs","Anticorpos produzidos por plasmócitos","Moléculas do complemento"],
+    a:1, exp:"PAMPs = Pathogen-Associated Molecular Patterns. Ex: LPS, flagelina, dsRNA."},
+
+  {q:"14) DAMPs são:",
+    opts:["Moléculas microbianas comuns","Sinais de dano do próprio organismo liberados em estresse/lesão","Enzimas do complemento","Receptores de linfócitos"],
+    a:1, exp:"DAMPs = Damage-Associated. Ex: HMGB1, ATP extracelular, ácido úrico."},
+
+  {q:"15) O TLR4 reconhece principalmente:",
+    opts:["dsRNA viral","LPS de bactérias Gram-negativas","Peptidoglicano de Gram-positivas","DNA CpG"],
+    a:1, exp:"TLR4 é o receptor clássico para LPS (endotoxina) de bactérias Gram-negativas."},
+
+  {q:"16) Os PRRs (Pattern Recognition Receptors) são:",
+    opts:["Gerados por recombinação somática, altamente variáveis","Codificados na linhagem germinativa, fixos e conservados","Anticorpos secretados","Presentes apenas em linfócitos T"],
+    a:1, exp:"PRRs são codificados na linhagem germinativa — diversidade limitada mas suficiente para padrões conservados de micróbios."},
+
+  {q:"17) O componente C3 é considerado central no sistema complemento porque:",
+    opts:["Só participa da via clássica","Todas as três vias de ativação convergem nele","Forma diretamente o MAC","É o único que causa lise"],
+    a:1, exp:"Clássica, alternativa e lectina convergem na clivagem de C3 em C3a + C3b."},
+
+  {q:"18) A opsonização pelo sistema complemento é mediada principalmente por:",
+    opts:["C3a","C3b","C5a","MAC"],
+    a:1, exp:"C3b se deposita no micróbio e é reconhecido por receptores em fagócitos, facilitando a fagocitose."},
+
+  {q:"19) As anafilatoxinas do sistema complemento são:",
+    opts:["C1 e C2","C3a e C5a","C6 e C7","C8 e C9"],
+    a:1, exp:"C3a e C5a promovem inflamação, degranulação de mastócitos e quimiotaxia (C5a é o mais potente)."},
+
+  {q:"20) O complexo de ataque à membrana (MAC) é formado por:",
+    opts:["C1-C2-C3","C3a-C3b","C5b-C6-C7-C8-C9","C1q-MBL"],
+    a:2, exp:"MAC = C5b-C6-C7-C8-C9 → perfura a membrana e causa lise osmótica."},
+
+  {q:"21) Deficiência de complemento terminal (C5-C9) está classicamente associada a infecções por:",
+    opts:["Staphylococcus aureus","Neisseria (meningite/gonococo)","Vírus da influenza","Fungos"],
+    a:1, exp:"Deficiência do MAC compromete a defesa contra Neisseria (bactéria Gram- com pouca parede)."},
+
+  {q:"22) Os cinco sinais cardinais da inflamação aguda são:",
+    opts:["Febre, calafrio, tosse, dor, edema","Rubor, calor, tumor, dor, perda de função","Cianose, palidez, dor, febre, fraqueza","Náusea, vômito, dor, febre, cefaleia"],
+    a:1, exp:"Sinais de Celso + perda de função (Virchow): rubor, calor, tumor, dor, perda de função."},
+
+  {q:"23) A sequência CORRETA do recrutamento leucocitário para o tecido inflamado é:",
+    opts:["Diapedese → adesão → rolamento → quimiotaxia","Rolamento → ativação → adesão firme → diapedese → quimiotaxia","Quimiotaxia → rolamento → diapedese → adesão","Adesão → rolamento → quimiotaxia → diapedese"],
+    a:1, exp:"Rolamento (selectinas) → ativação (quimiocinas) → adesão firme (integrinas) → diapedese → quimiotaxia."},
+
+  {q:"24) O rolamento leucocitário é mediado principalmente por:",
+    opts:["Integrinas","Selectinas","Imunoglobulinas","MHC"],
+    a:1, exp:"Selectinas (P, E, L) fazem o rolamento; integrinas fazem a adesão firme."},
+
+  {q:"25) As principais citocinas pirogênicas (que causam febre) são:",
+    opts:["IL-2, IL-4, IL-10","TNF-α, IL-1, IL-6","IFN-γ, TGF-β, IL-13","IL-8, IL-17, IL-22"],
+    a:1, exp:"TNF-α, IL-1 e IL-6 atuam no hipotálamo (via PGE2) causando febre, além de induzir proteínas de fase aguda."},
+
+  {q:"26) Os interferons tipo I (IFN-α e IFN-β) têm como função principal:",
+    opts:["Ativar macrófagos para matar bactérias intracelulares","Induzir estado antiviral e ativar células NK","Produzir anticorpos","Fazer opsonização de bactérias"],
+    a:1, exp:"IFN-I é o principal mecanismo antiviral da imunidade inata: bloqueia replicação viral e ativa NK."},
+
+  {q:"27) A célula NK reconhece células infectadas/tumorais principalmente porque estas:",
+    opts:["Aumentam expressão de MHC-I","Diminuem ou perdem expressão de MHC-I (missing self)","Expressam mais anticorpos","Produzem interferon"],
+    a:1, exp:"Muitos vírus e tumores reduzem MHC-I para escapar do CD8+. A NK detecta essa ausência ('missing self')."},
+
+  {q:"28) Para ativar completamente um linfócito T virgem, além do sinal do TCR-MHC (sinal 1), é necessário:",
+    opts:["Apenas anticorpos","Sinal 2 (coestimulação B7-CD28) e sinal 3 (citocinas)","Somente complemento","Apenas produção de interferon"],
+    a:1, exp:"São 3 sinais: TCR-MHC (1), coestimulação B7-CD28 (2) e citocinas polarizadoras (3). Sem sinal 2 → anergia."},
+
+  {q:"29) A célula que faz a PONTE entre imunidade inata e adaptativa, capturando antígeno no tecido e migrando ao linfonodo, é:",
+    opts:["Neutrófilo","Célula dendrítica","Eosinófilo","Plasmócito"],
+    a:1, exp:"DCs capturam antígenos, sofrem maturação induzida por PAMPs e migram ao linfonodo para ativar T naïve."},
+
+  {q:"30) Sobre a IMUNIDADE PASSIVA, é CORRETO afirmar:",
+    opts:["É adquirida por vacinação","Envolve produção ativa de anticorpos pelo receptor","É transferida na forma de anticorpos prontos (ex.: leite materno, soro) — imediata, mas sem memória","Só ocorre em adultos"],
+    a:2, exp:"Passiva = recebe anticorpos prontos. Imediata mas curta. Ex: IgG placentária, IgA no colostro, soro antiofídico."}
+];
+
+const container = document.getElementById('quizContainer');
+const answered = new Array(questions.length).fill(false);
+let correct = 0;
+
+function renderQuiz(){
+  container.innerHTML = '';
+  answered.fill(false);
+  correct = 0;
+  document.getElementById('scoreBox').style.display = 'none';
+  updateProgress();
+
+  questions.forEach((q, i)=>{
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    card.id = 'q'+i;
+    card.innerHTML = `
+      <div class="q-number">QUESTÃO ${i+1}</div>
+      <div class="q-text">${q.q}</div>
+      <div class="q-opts" id="opts-${i}"></div>
+      <div class="q-feedback" id="fb-${i}"></div>
+    `;
+    container.appendChild(card);
+    const optsDiv = card.querySelector('#opts-'+i);
+    q.opts.forEach((opt, j)=>{
+      const btn = document.createElement('div');
+      btn.className = 'q-opt';
+      btn.textContent = String.fromCharCode(65+j) + ') ' + opt;
+      btn.onclick = ()=> answer(i, j, btn);
+      optsDiv.appendChild(btn);
+    });
+  });
+}
+
+function answer(qi, choice, btnEl){
+  if(answered[qi]) return;
+  answered[qi] = true;
+  const q = questions[qi];
+  const all = document.querySelectorAll('#opts-'+qi+' .q-opt');
+  all.forEach((el, idx)=>{
+    el.style.cursor='default';
+    if(idx === q.a) el.classList.add('correct');
+    if(idx === choice && idx !== q.a) el.classList.add('wrong');
+  });
+  const fb = document.getElementById('fb-'+qi);
+  fb.classList.add('show');
+  if(choice === q.a){
+    correct++;
+    fb.classList.add('correct');
+    fb.innerHTML = '✅ <b>Correto!</b> ' + q.exp;
+  } else {
+    fb.classList.add('wrong');
+    fb.innerHTML = '❌ <b>Errado.</b> Resposta correta: <b>' + String.fromCharCode(65+q.a) + ') ' + q.opts[q.a] + '</b>. ' + q.exp;
+  }
+  updateProgress();
+}
+
+function updateProgress(){
+  const done = answered.filter(x=>x).length;
+  const pct = (done/questions.length)*100;
+  document.getElementById('progressBar').style.width = pct + '%';
+  document.getElementById('progressText').textContent = done + ' de ' + questions.length + ' respondidas';
+  if(done === questions.length){
+    const box = document.getElementById('scoreBox');
+    document.getElementById('scoreText').textContent = correct + ' / ' + questions.length;
+    let msg = '';
+    const pctScore = (correct/questions.length)*100;
+    if(pctScore >= 90) msg = '🏆 Excelente! Você tá pronto pra prova!';
+    else if(pctScore >= 70) msg = '👍 Bom desempenho! Revise as questões que errou.';
+    else if(pctScore >= 50) msg = '📖 Precisa reforçar. Volte às aulas e refaça.';
+    else msg = '⚠️ Estude com atenção — releia os resumos e refaça o quiz.';
+    document.getElementById('scoreMsg').textContent = msg;
+    box.style.display = 'block';
+  }
+}
+
+function resetQuiz(){ renderQuiz(); window.scrollTo({top:0,behavior:'smooth'}); }
+
+renderQuiz();
+</script>
+
+</body>
+</html>
