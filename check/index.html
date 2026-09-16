@@ -1,0 +1,2374 @@
+<!DOCTYPE html><html lang="pt-BR"><head>
+    <title>Jadlog - Checkout</title>
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <meta charset="UTF-8">
+    <meta name="csrf-token" content="035eba2859ce117853f12f85de39d3b7">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Open+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/font-awesome.css">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="icon" href="images/favi-ect.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            font-size: 14px;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
+        }
+        
+        .checkout-topbar {
+            background-color: #ba1e34;
+            color: #ffffff;
+            padding: 14px 16px;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 600;
+            line-height: 1.45;
+            text-shadow: 0 1px 1px rgba(0,0,0,0.18);
+        }
+        
+        .checkout-topbar * {
+            color: #ffffff !important;
+            font-size: 12px;
+            text-shadow: 0 1px 1px rgba(0,0,0,0.18);
+        }
+
+        .checkout-topbar-text {
+            color: #ffffff !important;
+        }
+        
+        .checkout-topbar strong {
+            font-weight: 700;
+        }
+        
+        .checkout-topbar em {
+            display: block;
+            margin-top: 7px;
+            font-size: 11px;
+            color: #ffffff !important;
+        }
+        
+        .logo-header {
+            background: #fff;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .checkout-logo {
+            max-height: 50px;
+            max-width: 150px;
+        }
+        
+        .cart-details {
+            background: #fff;
+            margin: 15px;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        
+        .product-grid {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .product-img {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            border-radius: 8px;
+            background: #f8fafc;
+            padding: 6px;
+        }
+        
+        .name_product_card {
+            font-weight: 600;
+            color: #333;
+            display: block;
+        }
+        
+        .p-amount {
+            color: #666;
+            font-size: 13px;
+        }
+
+        .required-star {
+            color: #e11d48;
+            font-weight: 800;
+            margin-left: 3px;
+            font-size: 16px;
+        }
+
+        .required-hint {
+            color: #b91c1c;
+            font-size: 13px;
+            font-weight: 700;
+            margin-top: -12px;
+            margin-bottom: 18px;
+            padding: 10px 12px;
+            background: #fff1f2;
+            border: 1px solid #fecdd3;
+            border-radius: 8px;
+        }
+
+        .label_contact .required-text {
+            color: #e11d48;
+            font-size: 11px;
+            font-weight: 800;
+            margin-left: 6px;
+            text-transform: uppercase;
+        }
+
+        input.input-error,
+        input.invalid-input {
+            border-color: #fda4af !important;
+            background-color: #fff1f2 !important;
+            box-shadow: 0 0 0 4px rgba(251, 113, 133, 0.08) !important;
+        }
+
+        input.valid-input {
+            border-color: #86efac !important;
+            background-color: #fff5f5 !important;
+            box-shadow: 0 0 0 4px rgba(74, 222, 128, 0.08) !important;
+        }
+
+        .field-help {
+            display: none;
+            margin-top: 6px;
+            color: #b45309;
+            font-size: 12px;
+            font-weight: 700;
+            line-height: 1.35;
+        }
+
+        .field-help.visible {
+            display: block;
+        }
+
+        .cpf-name-hidden {
+            display: none !important;
+        }
+        
+        .cp-total {
+            padding-top: 15px;
+        }
+        
+        .total_mobile {
+            font-size: 16px;
+            font-weight: 700;
+        }
+        
+        .valor_total {
+            color: #e30613;
+            font-size: 18px;
+        }
+        
+        .safe_buy {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 15px;
+            padding: 10px;
+            background: #fff1f2;
+            border-radius: 6px;
+        }
+        
+        .safe_buy span {
+            color: #ba1e34;
+            font-weight: 600;
+            font-size: 12px;
+        }
+        
+        .shild_img img {
+            width: 20px;
+            height: 20px;
+        }
+        
+        .card {
+            background: #ffffff;
+            border-radius: 16px;
+            border: 1px solid #edf2f7;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            overflow: visible !important;
+            transition: transform 0.2s ease;
+            position: relative;
+            z-index: 5;
+        }
+
+        .form-holder {
+            padding: 0 16px;
+            margin-bottom: 24px;
+        }
+        
+        .card h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1a202c;
+            margin-bottom: 24px;
+            letter-spacing: -0.02em;
+        }
+        
+        .label_contact {
+            font-size: 13px;
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 8px;
+            display: block;
+        }
+        
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"] {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 500;
+            color: #2d3748;
+            background-color: #f8fafc;
+            transition: all 0.2s ease;
+            -webkit-appearance: none;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #94a3b8;
+            background-color: #ffffff;
+            box-shadow: 0 0 0 4px rgba(148, 163, 184, 0.1);
+        }
+        
+        input:read-only {
+            background-color: #f1f5f9;
+            color: #718096;
+            border-color: #e2e8f0;
+            cursor: not-allowed;
+        }
+        
+        
+
+        
+        .chk-payment-flags {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .chk-flag-option {
+            flex: 1;
+            padding: 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 140px;
+            background: #fff;
+        }
+
+        .chk-flag-option.selected {
+            border-color: #e30613 !important;
+            background-color: #f0f7ff !important;
+            box-shadow: 0 0 0 4px rgba(75, 137, 255, 0.1) !important;
+        }
+
+        .pix-icon {
+            width: 79px;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        .chk-flag-option p {
+            margin: 10px 0 0 0;
+            font-size: 13px;
+            font-weight: 600;
+            width: 100%;
+            text-align: center;
+            color: #e30613;
+        }
+        
+        .obs {
+            font-size: 12px;
+            color: #666;
+            margin-top: 15px;
+        }
+
+        button,
+        .buy-btn,
+        .pix-copy-btn,
+        .btn-security {
+            font-family: 'Open Sans', Arial, sans-serif;
+        }
+        
+        .buy-btn {
+            background-color: #e70036;
+            color: #ffffff !important;
+            border: none;
+            padding: 16px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            width: 100%;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 20px;
+        }
+        
+        .buy-btn:hover {
+            background-color: #c00511;
+            transform: translateY(-2px);
+        }
+        
+        .buy-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .pix-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #f5f5f5;
+            z-index: 10000;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
+        }
+        
+        .pix-modal.active {
+            display: block;
+        }
+        
+        .pix-modal-container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: #fff;
+            min-height: 100vh;
+        }
+        
+        .pix-modal-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .pix-modal-header img {
+            height: 35px;
+        }
+        
+        .pix-modal-body {
+            padding: 25px 20px;
+        }
+        
+        .pix-modal-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #333;
+            text-align: center;
+            margin-bottom: 25px;
+            line-height: 1.4;
+        }
+        
+        .pix-timer-box {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        .pix-timer-label {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        
+        .pix-timer-value {
+            color: #e30613;
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        .pix-qrcode-section {
+            text-align: center;
+            margin-bottom: 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .pix-qrcode-image {
+            width: 200px;
+            height: 200px;
+            background: #fff;
+            border: 1px solid #eee;
+            border-radius: 12px;
+            padding: 10px;
+            margin: 0 auto;
+            display: block;
+        }
+        
+        .pix-copy-section {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        .pix-copy-label {
+            color: #333;
+            font-size: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .pix-copy-label strong {
+            font-weight: 700;
+        }
+        
+        .pix-code-box {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            word-break: break-all;
+            font-size: 13px;
+            color: #666;
+            text-align: left;
+        }
+        
+        .pix-copy-btn {
+            background: #e30613;
+            color: #fff;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 700;
+            width: 100%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: background 0.2s;
+        }
+        
+        .pix-copy-btn:hover {
+            background: #ba1e34;
+        }
+        
+        .pix-copy-btn.copied {
+            background: #c00511;
+        }
+        
+        .pix-copy-btn i {
+            font-size: 18px;
+        }
+        
+        .pix-value-box {
+            text-align: center;
+            padding: 20px 0;
+            border-top: 1px solid #eee;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 20px;
+        }
+        
+        .pix-value-label {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .pix-value-amount {
+            color: #e30613;
+            font-size: 22px;
+            font-weight: 700;
+            margin-left: 10px;
+        }
+        
+        .pix-accordion {
+            border-bottom: 1px solid #eee;
+        }
+        
+        .pix-accordion-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .pix-accordion-header i {
+            color: #666;
+            transition: transform 0.3s;
+        }
+        
+        .pix-accordion-header.active i {
+            transform: rotate(180deg);
+        }
+        
+        .pix-accordion-content {
+            display: none;
+            padding-bottom: 20px;
+        }
+        
+        .pix-accordion-content.active {
+            display: block;
+        }
+        
+        .pix-instruction {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .pix-instruction-icon {
+            width: 40px;
+            height: 40px;
+            background: #fde2e4;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        
+        .pix-instruction-icon svg {
+            width: 20px;
+            height: 20px;
+            color: #e30613;
+        }
+        
+        .pix-instruction-text {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.5;
+        }
+        
+        .pix-instruction-text strong {
+            color: #333;
+            font-weight: 600;
+        }
+        
+        .pix-modal-footer {
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+        }
+        
+        .pix-modal-footer img {
+            height: 25px;
+        }
+        
+        .pix-modal-footer .pix-safe {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #666;
+            font-size: 13px;
+        }
+        
+        .pix-modal-footer .pix-safe svg {
+            width: 16px;
+            height: 16px;
+            color: #666;
+        }
+        
+        @media (min-width: 768px) {
+            .pix-modal-container {
+                margin: 30px auto;
+                border-radius: 12px;
+                min-height: auto;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            }
+        }
+
+        .pix-check-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: #ffffff;
+            color: #e30613 !important;
+            border: 1.5px solid #e30613;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin: 20px auto 10px;
+            text-transform: none;
+            letter-spacing: normal;
+            width: fit-content;
+        }
+
+        .pix-check-btn:hover {
+            background: #f0f7ff;
+            transform: translateY(-1px);
+        }
+
+        .pix-check-btn:active {
+            transform: translateY(0);
+        }
+
+        .pix-check-btn i {
+            font-size: 14px;
+        }
+
+        .pix-check-hint {
+            margin-top: 4px;
+            font-size: 11px;
+            color: #94a3b8;
+            font-weight: 400;
+            text-align: center;
+        }
+
+        .pix-manual-check {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .pix-check-btn.loading {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+            color: #94a3b8 !important;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .pix-check-btn.loading i {
+            animation: fa-spin 1s infinite linear;
+        }
+
+        .pix-warning-box {
+            background: #fffbeb;
+            border: 1px solid #fef3c7;
+            border-radius: 8px;
+            padding: 12px 15px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .pix-warning-box i {
+            color: #d97706;
+            font-size: 16px;
+        }
+
+        .pix-warning-box p {
+            color: #92400e;
+            font-size: 12.5px;
+            line-height: 1.4;
+            margin: 0;
+            font-weight: 500;
+        }
+
+        .pix-warning-box strong {
+            font-weight: 700;
+        }
+
+        body.modal-open {
+            overflow: hidden !important;
+            height: 100vh !important;
+        }
+        
+        .reviews-section {
+            margin: 15px;
+        }
+        
+        .review-card {
+            background: #fff;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        
+        .review-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .review-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .review-name {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .review-stars {
+            color: #f8ce1c;
+            margin-top: 10px;
+        }
+        
+        .review-text {
+            color: #666;
+            font-size: 13px;
+            margin-top: 10px;
+        }
+        
+        footer {
+            background: #3f3e40;
+            padding: 20px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        footer p {
+            color: #fff;
+            font-size: 12px;
+            margin: 5px 0;
+        }
+        
+        .payment-icons {
+            margin-top: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .payment-icons img {
+            height: 20px;
+            width: auto;
+        }
+        
+        .btn-security {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #3f3e40;
+            border: 1px solid #e0033b;
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .btn-security img {
+            width: 16px;
+            height: 16px;
+        }
+
+        @keyframes clienteButtonPulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 8px 18px rgba(37, 99, 235, 0.10), 0 0 0 3px rgba(147, 197, 253, 0.10);
+            }
+
+            50% {
+                transform: scale(1.018);
+                box-shadow: 0 10px 22px rgba(37, 99, 235, 0.16), 0 0 0 5px rgba(147, 197, 253, 0.16);
+            }
+        }
+
+        button:not(:disabled),
+        .buy-btn:not(:disabled),
+        .pix-copy-btn:not(:disabled),
+        .btn-security:not(:disabled),
+        .btn-safe:not(:disabled) {
+            animation: clienteButtonPulse 2.8s ease-in-out infinite;
+            transform-origin: center;
+            will-change: transform, box-shadow;
+        }
+
+        button:hover:not(:disabled),
+        .buy-btn:hover:not(:disabled),
+        .pix-copy-btn:hover:not(:disabled),
+        .btn-security:hover:not(:disabled),
+        .btn-safe:hover:not(:disabled) {
+            animation-play-state: paused;
+            transform: scale(1.02);
+        }
+
+        button:disabled {
+            animation: none;
+            box-shadow: none;
+        }
+
+        .cart-details,
+        .card,
+        .review-card,
+        .pix-timer-box,
+        .pix-code-box,
+        .pix-qrcode-image {
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .ajax-loader {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255,255,255,0.95);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        
+        .ajax-loader.active {
+            display: flex;
+        }
+        
+        .ajax-loader img {
+            width: 100px;
+        }
+        
+        .ajax-loader span {
+            margin-top: 15px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .success-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .success-modal.active {
+            display: flex;
+        }
+        
+        .success-content {
+            background: #fff;
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            max-width: 400px;
+            margin: 20px;
+            animation: bounceIn 0.5s ease;
+        }
+        
+        @keyframes bounceIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #e70036 0%, #c00511 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+        
+        .success-icon i {
+            font-size: 40px;
+            color: #fff;
+        }
+        
+        .success-content h2 {
+            color: #333;
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+        
+        .success-content p {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .sub {
+            font-size: 13px;
+            color: #666;
+        }
+        
+        .subtotal-value {
+            font-weight: 600;
+        }
+        
+        hr {
+            border: none;
+            border-top: 1px solid #eee;
+            margin: 15px 0;
+        }
+        
+        .line-through {
+            text-decoration: line-through;
+        }
+        
+        .text-success {
+            color: #e70036 !important;
+        }
+        
+        .modal-safe {
+            display: none;
+        }
+        
+        .title-safe {
+            font-size: 20px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .title-safe span {
+            color: #e70036;
+        }
+        
+        .description-safe {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        
+        .title-group {
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+        
+        .description-group {
+            color: #666;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        
+        .btn-safe {
+            background: #e70036;
+            color: #fff;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .main-container {
+            max-width: 100%;
+            margin: 0 auto;
+        }
+        
+        @media (min-width: 768px) {
+            .main-container {
+                max-width: 600px;
+                padding: 20px;
+            }
+            
+            .logo-header {
+                max-width: 600px;
+                margin: 0 auto;
+                border-radius: 0 0 8px 8px;
+            }
+            
+            .checkout-topbar {
+                max-width: 600px;
+                margin: 0 auto;
+            }
+            
+            .cart-details {
+                margin: 20px auto;
+                max-width: 600px;
+            }
+            
+            .form-holder {
+                max-width: 600px;
+                margin: 0 auto;
+                padding: 0;
+            }
+            
+            .reviews-section {
+                max-width: 600px;
+                margin: 20px auto;
+            }
+            
+            footer {
+                max-width: 600px;
+                margin: 20px auto;
+                border-radius: 8px;
+            }
+            
+            .card {
+                margin-bottom: 20px;
+            }
+            
+            .qr-code-img {
+                max-width: 250px;
+            }
+            
+            .review-card {
+                margin-bottom: 15px;
+            }
+        }
+        
+        @media (min-width: 992px) {
+            body {
+                padding-top: 20px;
+            }
+            
+            .main-container {
+                max-width: 650px;
+            }
+            
+            .logo-header,
+            .checkout-topbar,
+            .cart-details,
+            .form-holder,
+            .reviews-section,
+            footer {
+                max-width: 650px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .checkout-topbar * {
+                font-size: 11px;
+            }
+        }
+
+        .email-input-wrapper {
+            position: relative;
+        }
+
+        .email-suggestions-container {
+            position: absolute;
+            top: calc(100% + 5px);
+            left: 0;
+            right: 0;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.2), 0 15px 25px -10px rgba(0, 0, 0, 0.1);
+            z-index: 9999 !important;
+            overflow-y: auto;
+            max-height: 350px;
+            display: none;
+            animation: fadeInScale 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            transform-origin: top center;
+            scrollbar-width: thin;
+            scrollbar-color: #cbd5e1 #f8fafc;
+        }
+
+        .email-suggestions-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .email-suggestions-container::-webkit-scrollbar-track {
+            background: #f8fafc;
+        }
+
+        .email-suggestions-container::-webkit-scrollbar-thumb {
+            background-color: #cbd5e1;
+            border-radius: 20px;
+        }
+
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.95) translateY(-10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .email-suggestion-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            color: #4a5568;
+            transition: all 0.15s ease;
+            border-bottom: 1px solid #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .email-suggestion-item:last-child {
+            border-bottom: none;
+        }
+
+        .email-suggestion-item:hover, .email-suggestion-item.selected {
+            background-color: #f8fafc;
+            color: #e70036;
+        }
+
+        .email-suggestion-item .domain-part {
+            color: #e70036;
+            font-weight: 600;
+        }
+
+        .email-suggestion-item i {
+            font-size: 12px;
+            opacity: 0.5;
+        }
+
+        .email-suggestion-item:hover i {
+            opacity: 1;
+            transform: translateX(3px);
+            transition: transform 0.2s ease;
+        }
+
+        #identification-card {
+            z-index: 200 !important;
+            overflow: visible !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="ajax-loader" id="ajaxLoader">
+        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <span>Processando pagamento!</span>
+    </div>
+    
+    <div class="success-modal" id="successModal">
+        <div class="success-content">
+            <div class="success-icon">
+                <i class="fa fa-check"></i>
+            </div>
+            <h2>Pagamento Confirmado!</h2>
+            <p>Sua encomenda será liberada em até 24 horas. Você receberá uma notificação quando estiver a caminho.</p>
+        </div>
+    </div>
+
+    <div class="logo-header">
+        <img class="checkout-logo" src="../assets/imagens/logo.webp" alt="Jadlog">
+    </div>
+    
+    <div class="checkout-topbar">
+        <strong>IMPORTANTE:</strong> <span class="checkout-topbar-text">O não pagamento da taxa de entrega dentro do prazo informado pode impedir a liberação do envio.</span>
+        <em>Após realizar o pagamento, permaneça nesta tela até a confirmação.</em>
+    </div>
+    
+    <div class="cart-details">
+        <div class="product-grid">
+            <div>
+                <img class="product-img" src="../assets/imagens/logo.webp" alt="Jadlog">
+            </div>
+            <div style="flex: 1;">
+                <span class="name_product_card">Taxa de Entrega</span>
+                <span class="info-small"></span>
+            </div>
+        </div>
+        
+        <div class="row justify-content-between align-items-center p-0 mt-3 mb-2">
+            <div class="col-6 sub text-start">Subtotal</div>
+            <div class="col-6 text-end sub">
+                R$ <span class="subtotal-value">58,36</span>
+            </div>
+        </div>
+        
+        <hr class="mt-0">
+        
+        <div class="cp-total">
+            <div class="row justify-content-between align-items-center total_mobile">
+                <div class="col-6 text-start">Total</div>
+                <div class="col-6 text-end">
+                    <span class="valor_total" id="totalValue">R$ 58,36</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="safe_buy">
+            <div class="shild_img">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 22C12 22 20 18 20 12V5L12 2L4 5V12C4 18 12 22 12 22Z" stroke="#e30613" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                    <path d="M9 12L11 14L15 10" stroke="#e30613" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+            </div>
+            <span>PAGAMENTO 100% SEGURO</span>
+        </div>
+    </div>
+    
+    <div class="form-holder">
+        <form id="formulario_pagamento">
+            <div class="card mb-3 p-3 p-sm-4" id="identification-card">
+                <h3><b>Identificação</b></h3>
+                <p class="required-hint">Preencha os campos obrigatórios corretamente para continuar.</p>
+                
+                <div class="row" id="identityFieldsRow">
+                    <div class="col-12 mb-3 col-md-12" id="documentFieldGroup">
+                        <label for="document" class="label_contact">CPF <span class="required-star">*</span><span class="required-text">obrigatório</span></label>
+                        <input type="tel" name="document" id="document" placeholder="000.000.000-00" maxlength="14" value="" inputmode="numeric" autocomplete="off" required="" class="invalid-input">
+                    </div><div class="col-12 col-md-6 mb-3 cpf-name-hidden" id="nameFieldGroup">
+                        <label for="name" class="label_contact">Nome completo <span class="required-star">*</span><span class="required-text">obrigatório</span></label>
+                        <input type="text" name="name" id="name" placeholder="Nome completo" maxlength="100" value="" autocomplete="name" required="" class="invalid-input">
+                        <div id="nameCpfLookupHint" class="field-help" aria-live="polite"></div>
+                    </div>
+                    
+                </div><div class="row" id="contactFieldsRow">
+                    <div class="col-12 col-sm-6 mb-3">
+                        <label for="email" class="label_contact">E-mail <span class="required-star">*</span><span class="required-text">obrigatório</span></label>
+                        <div class="email-input-wrapper">
+                            <input type="email" name="email" id="email" placeholder="seu@email.com" maxlength="60" value="" inputmode="email" autocomplete="email" required="" class="invalid-input">
+                            <div id="email-suggestions" class="email-suggestions-container"></div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 mb-3">
+                        <label for="telephone" class="label_contact">Telefone / WhatsApp <span class="required-star">*</span><span class="required-text">obrigatório</span></label>
+                        <input type="tel" name="telephone" id="telephone" placeholder="(00) 00000-0000" maxlength="15" value="" inputmode="numeric" autocomplete="tel" required="" class="invalid-input">
+                    </div>
+                </div>
+                
+                
+            </div>
+            
+            <div class="card p-3 p-sm-4 mb-3">
+                <h3><b>Pagamento</b></h3>
+                
+                <div class="chk-payment-flags">
+                    <div class="chk-flag-option selected" id="pixOption">
+                        <img src="images/logo-pix.png" alt="Pix" class="pix-icon">
+                    </div>
+                </div>
+
+                <p class="obs">
+                    Ao clicar no botão abaixo, você será encaminhado para um ambiente seguro para finalizar seu pagamento.
+                </p>
+                
+                <button type="button" id="generatePixBtn" class="buy-btn">
+                    Gerar Pix
+                </button>
+                
+            </div>
+        </form>
+    </div>
+    
+    <div class="reviews-section">
+        <div class="review-card">
+            <div class="review-header">
+                <img class="review-avatar" src="images/phpaS2UvD.jpg" alt="Avatar">
+                <span class="review-name">Pix Imediato!</span>
+            </div>
+            <div class="review-stars">
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+            </div>
+            <div class="review-text">Após o pagamento da taxa o produto é liberado em até 24 Horas.</div>
+        </div>
+        
+        <div class="review-card">
+            <div class="review-header">
+                <img class="review-avatar" src="images/phpZ02sjY.jpg" alt="Avatar">
+                <span class="review-name">Verificação</span>
+            </div>
+            <div class="review-stars">
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+            </div>
+            <div class="review-text">Empresa autorizada e verificada a receber valores de taxa federal.</div>
+        </div>
+        
+        <div class="review-card">
+            <div class="review-header">
+                <img class="review-avatar" src="images/phpK9KfhZ.jpg" alt="Avatar">
+                <span class="review-name">Governo Federal</span>
+            </div>
+            <div class="review-stars">
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+            </div>
+            <div class="review-text">Programa do Governo Federal 2026</div>
+        </div>
+    </div>
+    
+    <footer>
+        <p class="mb-2">Formas de pagamento</p>
+        <div class="payment-icons">
+            <img src="images/logo-pix.png" alt="Pix">
+        </div>
+        <p style="color: #e0033b;">©2025 Jadlog - Todos os direitos reservados</p>
+        <div class="mt-3">
+            <button class="btn-security">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 22C12 22 20 18 20 12V5L12 2L4 5V12C4 18 12 22 12 22Z" stroke="#fff" stroke-width="2"></path>
+                </svg>
+                Ambiente seguro
+            </button>
+        </div>
+    </footer>
+    
+    <div class="pix-modal" id="pixModal">
+        <div class="pix-modal-container">
+            <div class="pix-modal-header">
+                <img src="../assets/imagens/logo.webp" alt="Jadlog">
+            </div>
+            
+            <div class="pix-modal-body">
+                <h1 class="pix-modal-title">Falta pouco! Para finalizar o pagamento, utilize o PIX!</h1>
+                
+                <div class="pix-warning-box">
+                    <i class="fa fa-info-circle"></i>
+                    <p>
+                        <strong>Importante:</strong> Após pagar, permaneça nesta tela para confirmação automática. O fechamento precoce pode atrasar a liberação do seu pedido.
+                    </p>
+                </div>
+                
+                <div class="pix-timer-box">
+                    <div class="pix-timer-label">O código expira em:</div>
+                    <div class="pix-timer-value" id="pixTimer">10:00</div>
+                </div>
+                
+                <div class="pix-qrcode-section" id="pixQrCodeSection" style="display: none;">
+                    <img src="" alt="QR Code Pix" class="pix-qrcode-image" id="pixQrCodeImg">
+                </div>
+                
+                <div class="pix-copy-section">
+                    <p class="pix-copy-label">Copie a chave abaixo e utilize a opção <strong>PIX Copia e Cola</strong>:</p>
+                    <div class="pix-code-box" id="pixCodeBox"></div>
+                    <button type="button" class="pix-copy-btn" id="pixCopyBtn" onclick="copyPixCode()">
+                        <i class="fa fa-clone"></i> COPIAR CÓDIGO
+                    </button>
+                </div>
+                
+                <div class="pix-value-box">
+                    <span class="pix-value-label">Valor a ser pago:</span>
+                    <span class="pix-value-amount">R$ 58,36</span>
+                </div>
+
+                <div class="pix-manual-check">
+                    <button type="button" class="pix-check-btn" id="pixCheckBtn" onclick="checkManualPayment()">
+                        <i class="fa fa-sync-alt"></i> JÁ REALIZEI O PAGAMENTO
+                    </button>
+                    <p class="pix-check-hint">Clique acima para liberar seu pedido imediatamente após pagar.</p>
+                </div>
+                
+                <div class="pix-accordion">
+                    <div class="pix-accordion-header active" onclick="toggleAccordion(this)">
+                        <span>Instruções para pagamento</span>
+                        <i class="fa fa-chevron-up"></i>
+                    </div>
+                    <div class="pix-accordion-content active">
+                        <div class="pix-instruction">
+                            <div class="pix-instruction-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+                                    <line x1="12" y1="18" x2="12.01" y2="18"></line>
+                                </svg>
+                            </div>
+                            <div class="pix-instruction-text">
+                                Após copiar o código, abra seu aplicativo de pagamento onde você utiliza o Pix.
+                            </div>
+                        </div>
+                        <div class="pix-instruction">
+                            <div class="pix-instruction-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                    <rect x="7" y="7" width="3" height="3"></rect>
+                                    <rect x="14" y="7" width="3" height="3"></rect>
+                                    <rect x="7" y="14" width="3" height="3"></rect>
+                                </svg>
+                            </div>
+                            <div class="pix-instruction-text">
+                                Escolha a opção <strong>PIX Copia e Cola</strong> e insira o código copiado.
+                            </div>
+                        </div>
+                        <div class="pix-instruction">
+                            <div class="pix-instruction-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                                </svg>
+                            </div>
+                            <div class="pix-instruction-text">
+                                Confirme as informações e finalize seu pagamento.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="pix-accordion">
+                    <div class="pix-accordion-header" onclick="toggleAccordion(this)">
+                        <span>Detalhes do pagamento:</span>
+                        <i class="fa fa-chevron-down"></i>
+                    </div>
+                    <div class="pix-accordion-content">
+                        <div style="display: flex; justify-content: space-between; padding: 10px 0;">
+                            <span style="color: #666;">Valor total:</span>
+                            <span style="font-weight: 600;">R$ 58,36</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            
+            <div class="pix-modal-footer">
+                <img src="images/logo-pix.png" alt="Pix" style="height: 20px;">
+                <div class="pix-safe">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                    <span>Ambiente seguro</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            return false;
+        });
+        
+        document.addEventListener('selectstart', function(e) {
+            e.preventDefault();
+            return false;
+        });
+        
+        document.addEventListener('dragstart', function(e) {
+            e.preventDefault();
+            return false;
+        });
+        
+        document.addEventListener('keydown', function(e) {
+            if (e.keyCode === 123) {
+                e.preventDefault();
+                return false;
+            }
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 73) {
+                e.preventDefault();
+                return false;
+            }
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 74) {
+                e.preventDefault();
+                return false;
+            }
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 67) {
+                e.preventDefault();
+                return false;
+            }
+            if (e.ctrlKey && e.keyCode === 85) {
+                e.preventDefault();
+                return false;
+            }
+            if (e.ctrlKey && e.keyCode === 83) {
+                e.preventDefault();
+                return false;
+            }
+            if (e.ctrlKey && e.keyCode === 65 && e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+                e.preventDefault();
+                return false;
+            }
+        });
+        
+        
+        
+        window.createPixWithCurrentApi = async function(payload) {
+            try {
+                // Captura parâmetros UTM da URL atual
+                const urlParams = new URLSearchParams(window.location.search);
+                const utmParams = {
+                    utm_source: urlParams.get('utm_source') || urlParams.get('src') || '',
+                    utm_medium: urlParams.get('utm_medium') || '',
+                    utm_campaign: urlParams.get('utm_campaign') || '',
+                    utm_content: urlParams.get('utm_content') || '',
+                    utm_term: urlParams.get('utm_term') || '',
+                    xcod: urlParams.get('xcod') || '',
+                    sck: urlParams.get('sck') || '',
+                    src: urlParams.get('src') || '',
+                    utm_id: urlParams.get('utm_id') || ''
+                };
+
+                // Monta o payload conforme esperado pelo pagamento-paradise.php
+                const payloadParadise = {
+                    nome: payload.name,
+                    cpf: payload.document,
+                    email: payload.email,
+                    telefone: payload.telephone,
+                    valor: payload.amount || 5836, // valor em centavos
+                    ...utmParams
+                };
+
+                console.log('[Paradise] Enviando payload:', payloadParadise);
+
+                const response = await fetch('https://grey-chimpanzee-454879.hostingersite.com/api2/pagamento.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payloadParadise)
+                });
+
+                const result = await response.json();
+                console.log('[Paradise] Resposta recebida:', result);
+
+                if (result.success) {
+                    return {
+                        success: true,
+                        data: {
+                            id: result.token,
+                            status_nonce: result.token,
+                            brCode: result.pixCopiaECola || result.pixCode,
+                            pix: result.qrCodeUrl ? {
+                                qr_code: {
+                                    data_uri: result.qrCodeUrl
+                                }
+                            } : null
+                        }
+                    };
+                } else {
+                    return {
+                        success: false,
+                        error: result.message || 'Erro ao gerar PIX'
+                    };
+                }
+            } catch (error) {
+                console.error('[Paradise] Erro:', error);
+                return { success: false, error: 'Erro de conexão com o servidor.' };
+            }
+        };
+
+        const initialCustomerName = "";
+        const initialCustomerDocument = "";
+        const customerEmail = "";
+        const customerTelephone = "";
+        const trackingData = [];
+        const productKey = "main";
+        const cpfLookupNonce = "f4111813d6594e9179b5bb3023af3f35";
+        const amount = 58.36;
+        const clientScope = "https:\/\/rastreamento-atendimento.help\/cliente\/42254";
+        let chargeId = null;
+        let paymentStatusNonce = null;
+        let timerInterval = null;
+        let paymentStatusInterval = null;
+        
+        const emailDomains = ['@gmail.com', '@hotmail.com', '@outlook.com', '@yahoo.com', '@icloud.com', '@live.com'];
+        const emailInput = document.getElementById('email');
+        const emailSuggestions = document.getElementById('email-suggestions');
+        const phoneInput = document.getElementById('telephone');
+        const nameInput = document.getElementById('name');
+        const docInput = document.getElementById('document');
+        const nameLookupHint = document.getElementById('nameCpfLookupHint');
+        const identityFieldsRow = document.getElementById('identityFieldsRow');
+        const contactFieldsRow = document.getElementById('contactFieldsRow');
+        const documentFieldGroup = document.getElementById('documentFieldGroup');
+        const nameFieldGroup = document.getElementById('nameFieldGroup');
+        let cpfLookupTimer = null;
+        let cpfForAutofilledName = initialCustomerName && initialCustomerDocument ? initialCustomerDocument : '';
+
+        const normalizeCpfDigits = (cpf) => String(cpf || '').replace(/\D/g, '').slice(0, 11);
+
+        const formatCpf = (cpf) => {
+            const digits = normalizeCpfDigits(cpf);
+            if (digits.length <= 3) return digits;
+            if (digits.length <= 6) return digits.replace(/^(\d{3})(\d+)/, '$1.$2');
+            if (digits.length <= 9) return digits.replace(/^(\d{3})(\d{3})(\d+)/, '$1.$2.$3');
+            return digits.replace(/^(\d{3})(\d{3})(\d{3})(\d{0,2}).*/, '$1.$2.$3-$4');
+        };
+
+        const validateName = (name) => {
+            name = String(name || '').trim().replace(/\s+/g, ' ');
+            return name.length >= 3 && /[A-Za-zÀ-ÿ]{2,}/.test(name);
+        };
+
+        const validateCpf = (cpf) => {
+            const digits = normalizeCpfDigits(cpf);
+            if (digits.length !== 11 || /^(\d)\1+$/.test(digits)) return false;
+
+            let sum = 0;
+            for (let i = 0; i < 9; i++) sum += Number(digits[i]) * (10 - i);
+            let check = (sum * 10) % 11;
+            if (check === 10) check = 0;
+            if (check !== Number(digits[9])) return false;
+
+            sum = 0;
+            for (let i = 0; i < 10; i++) sum += Number(digits[i]) * (11 - i);
+            check = (sum * 10) % 11;
+            if (check === 10) check = 0;
+
+            return check === Number(digits[10]);
+        };
+
+        const currentCustomerName = () => String(nameInput.value || '').trim().replace(/\s+/g, ' ');
+        const currentCustomerDocument = () => normalizeCpfDigits(docInput.value);
+
+        function moveCpfFirst() {
+            if (identityFieldsRow && contactFieldsRow && contactFieldsRow.parentNode) {
+                contactFieldsRow.parentNode.insertBefore(identityFieldsRow, contactFieldsRow);
+            }
+
+            if (identityFieldsRow && documentFieldGroup && nameFieldGroup) {
+                identityFieldsRow.insertBefore(documentFieldGroup, nameFieldGroup);
+            }
+        }
+
+        function showNameField() {
+            if (nameFieldGroup) {
+                nameFieldGroup.classList.remove('cpf-name-hidden');
+            }
+
+            if (documentFieldGroup) {
+                documentFieldGroup.classList.remove('col-md-12');
+                documentFieldGroup.classList.add('col-md-6');
+            }
+        }
+
+        function hideNameField() {
+            if (nameFieldGroup) {
+                nameFieldGroup.classList.add('cpf-name-hidden');
+            }
+
+            if (documentFieldGroup) {
+                documentFieldGroup.classList.remove('col-md-6');
+                documentFieldGroup.classList.add('col-md-12');
+            }
+        }
+
+        function hideNameFieldIfEmpty() {
+            if (!nameFieldGroup || validateName(nameInput.value)) {
+                return;
+            }
+
+            hideNameField();
+        }
+
+        function setNameLookupHint(message) {
+            if (!nameLookupHint) {
+                return;
+            }
+
+            nameLookupHint.textContent = message || '';
+            nameLookupHint.classList.toggle('visible', Boolean(message));
+        }
+
+        function getSavedFunnelTracking() {
+            try {
+                return JSON.parse(localStorage.getItem('funnel_tracking') || '{}') || {};
+            } catch (error) {
+                return {};
+            }
+        }
+
+        function getSavedCustomerData() {
+            try {
+                return JSON.parse(sessionStorage.getItem('checkout_customer') || '{}') || {};
+            } catch (error) {
+                return {};
+            }
+        }
+
+        function fillMissingCustomerFieldsFromStorage() {
+            const saved = getSavedCustomerData();
+            const savedDocument = saved.document || saved.cpf || '';
+            const savedName = saved.name || saved.nome || '';
+            const savedPhone = saved.telephone || saved.telefone || '';
+            const savedDocumentDigits = normalizeCpfDigits(savedDocument);
+
+            if (!docInput.value && savedDocumentDigits) {
+                docInput.value = formatCpf(savedDocumentDigits);
+            }
+
+            const currentDocument = currentCustomerDocument();
+            if (!nameInput.value && savedName && savedDocumentDigits && savedDocumentDigits === currentDocument) {
+                nameInput.value = String(savedName).trim();
+            }
+            if (!emailInput.value && saved.email) {
+                emailInput.value = String(saved.email).trim();
+            }
+            if (!phoneInput.value && savedPhone) {
+                phoneInput.value = formatPhoneDisplay(savedPhone);
+            }
+        }
+
+        function getIdempotencyKey(documentDigits) {
+            const key = 'checkout_idempotency_' + clientScope + '_' + productKey + '_' + documentDigits + '_' + amount;
+            let value = sessionStorage.getItem(key);
+            if (!value) {
+                value = 'checkout-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 12);
+                sessionStorage.setItem(key, value);
+            }
+
+            return value;
+        }
+
+        function paymentStatusUrl() {
+            const params = new URLSearchParams({
+                id: chargeId || ''
+            });
+            return 'https://grey-chimpanzee-454879.hostingersite.com/api2/verificar.php?' + params.toString();
+        }
+
+        async function hydrateNameFromCpf() {
+            const cpf = currentCustomerDocument();
+            if (!validateCpf(cpf)) {
+                setNameLookupHint('');
+                hideNameFieldIfEmpty();
+                return false;
+            }
+
+            if (validateName(nameInput.value)) {
+                showNameField();
+                setNameLookupHint('');
+                return false;
+            }
+
+            try {
+                const response = await fetch('api.php?cpf=' + encodeURIComponent(cpf) + '&nonce=' + encodeURIComponent(cpfLookupNonce), {
+                    headers: { 'Accept': 'application/json' }
+                });
+                const data = await response.json();
+                const fetchedName = data && data.found && data.data && data.data.NOME ? String(data.data.NOME).trim() : '';
+                if (validateName(fetchedName)) {
+                    nameInput.value = fetchedName;
+                    cpfForAutofilledName = cpf;
+                    showNameField();
+                    updateValidationState(nameInput, validateName);
+                    setNameLookupHint('');
+                    persistFunnelTracking();
+                    return true;
+                }
+            } catch (error) {
+                showNameField();
+                setNameLookupHint('Nao conseguimos consultar o CPF agora. Digite seu nome completo.');
+                return false;
+            }
+
+            showNameField();
+            nameInput.placeholder = 'Digite seu nome completo';
+            setNameLookupHint('Nao encontramos o nome por esse CPF. Digite seu nome completo.');
+            return false;
+        }
+
+        function queueCpfLookup() {
+            clearTimeout(cpfLookupTimer);
+            if (!validateCpf(currentCustomerDocument()) || validateName(nameInput.value)) {
+                return;
+            }
+
+            cpfLookupTimer = setTimeout(() => {
+                hydrateNameFromCpf();
+            }, 350);
+        }
+
+        function persistFunnelTracking() {
+            try {
+                const saved = getSavedFunnelTracking();
+                const nextTracking = Object.assign({}, saved);
+                Object.keys(nextTracking).forEach((key) => {
+                    if (!String(key).startsWith('utm_') && !['src', 'campaign', 'fbclid', 'gclid', 'click_id'].includes(String(key))) {
+                        delete nextTracking[key];
+                    }
+                });
+                Object.keys(trackingData || {}).forEach((key) => {
+                    if (String(key).startsWith('utm_') || ['src', 'campaign', 'fbclid', 'gclid', 'click_id'].includes(String(key))) {
+                        nextTracking[key] = trackingData[key];
+                    }
+                });
+                localStorage.setItem('funnel_tracking', JSON.stringify(nextTracking));
+
+                const customer = {
+                    name: currentCustomerName(),
+                    nome: currentCustomerName(),
+                    document: currentCustomerDocument(),
+                    cpf: currentCustomerDocument(),
+                    email: emailInput && emailInput.value ? emailInput.value.trim() : customerEmail,
+                    telephone: phoneInput && phoneInput.value ? normalizePhoneDigits(phoneInput.value) : customerTelephone,
+                    telefone: phoneInput && phoneInput.value ? normalizePhoneDigits(phoneInput.value) : customerTelephone
+                };
+                sessionStorage.setItem('checkout_customer', JSON.stringify(customer));
+            } catch (error) {}
+        }
+        
+        function updateValidationState(input, validator) {
+            const val = input.value.trim();
+            
+            if (validator(val)) {
+                input.classList.remove('invalid-input', 'input-error');
+                input.classList.add('valid-input');
+            } else {
+                input.classList.remove('valid-input');
+                input.classList.add('invalid-input');
+            }
+        }
+
+        moveCpfFirst();
+        if (validateName(nameInput.value)) {
+            showNameField();
+        } else {
+            hideNameFieldIfEmpty();
+        }
+
+        emailInput.addEventListener('input', function(e) {
+            const value = e.target.value.trim();
+            emailSuggestions.innerHTML = '';
+            
+            if (value && !value.includes('@')) {
+                emailDomains.forEach(domain => {
+                    const item = document.createElement('div');
+                    item.className = 'email-suggestion-item';
+                    item.innerHTML = `
+                        <span>${value}<span class="domain-part">${domain}</span></span>
+                        <i class="fa fa-chevron-right"></i>
+                    `;
+                    item.addEventListener('click', function() {
+                        emailInput.value = value + domain;
+                        emailSuggestions.style.display = 'none';
+                        updateValidationState(emailInput, validateEmail);
+                        persistFunnelTracking();
+                    });
+                    emailSuggestions.appendChild(item);
+                });
+                emailSuggestions.style.display = 'block';
+            } else {
+                emailSuggestions.style.display = 'none';
+            }
+            updateValidationState(emailInput, validateEmail);
+            persistFunnelTracking();
+        });
+        document.addEventListener('click', function(e) {
+            if (!emailInput.contains(e.target) && !emailSuggestions.contains(e.target)) {
+                emailSuggestions.style.display = 'none';
+            }
+        });
+        emailInput.addEventListener('keydown', function(e) {
+            const items = emailSuggestions.querySelectorAll('.email-suggestion-item');
+            let selectedIndex = Array.from(items).findIndex(item => item.classList.contains('selected'));
+
+            if (emailSuggestions.style.display === 'block') {
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    if (selectedIndex < items.length - 1) {
+                        if (selectedIndex !== -1) items[selectedIndex].classList.remove('selected');
+                        items[selectedIndex + 1].classList.add('selected');
+                        items[selectedIndex + 1].scrollIntoView({ block: 'nearest' });
+                    }
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    if (selectedIndex > 0) {
+                        items[selectedIndex].classList.remove('selected');
+                        items[selectedIndex - 1].classList.add('selected');
+                        items[selectedIndex - 1].scrollIntoView({ block: 'nearest' });
+                    }
+                } else if (e.key === 'Enter') {
+                    if (selectedIndex !== -1) {
+                        e.preventDefault();
+                        items[selectedIndex].click();
+                    }
+                } else if (e.key === 'Escape') {
+                    emailSuggestions.style.display = 'none';
+                }
+            }
+        });
+        
+        const formatPhoneDisplay = (phone) => {
+            const digits = normalizePhoneDigits(phone);
+            if (digits.length <= 2) return digits;
+
+            const ddd = digits.slice(0, 2);
+            const number = digits.slice(2);
+            const prefixSize = number.startsWith('9') ? 5 : 4;
+            const prefix = number.slice(0, prefixSize);
+            const suffix = number.slice(prefixSize, prefixSize + 4);
+
+            return suffix
+                ? `(${ddd}) ${prefix}-${suffix}`
+                : `(${ddd}) ${prefix}`;
+        };
+
+        phoneInput.addEventListener('input', function(e) {
+            e.target.value = formatPhoneDisplay(e.target.value);
+            updateValidationState(phoneInput, (v) => validatePhone(normalizePhoneDigits(v)));
+            persistFunnelTracking();
+        });
+
+        nameInput.addEventListener('input', function() {
+            showNameField();
+            cpfForAutofilledName = '';
+            updateValidationState(nameInput, validateName);
+            if (validateName(nameInput.value)) {
+                setNameLookupHint('');
+            }
+            persistFunnelTracking();
+        });
+
+        docInput.addEventListener('input', function(e) {
+            e.target.value = formatCpf(e.target.value);
+            const currentCpf = currentCustomerDocument();
+            if (cpfForAutofilledName && currentCpf !== cpfForAutofilledName) {
+                nameInput.value = '';
+                cpfForAutofilledName = '';
+                hideNameFieldIfEmpty();
+            }
+            updateValidationState(docInput, validateCpf);
+            setNameLookupHint('');
+            if (!validateCpf(currentCpf)) {
+                hideNameFieldIfEmpty();
+            }
+            queueCpfLookup();
+            persistFunnelTracking();
+        });
+
+        docInput.addEventListener('blur', hydrateNameFromCpf);
+
+        window.addEventListener('load', async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const urlName = urlParams.get('name') || urlParams.get('nome') || '';
+            const urlDocument = urlParams.get('document') || urlParams.get('cpf') || '';
+
+            if (urlDocument && !docInput.value) {
+                docInput.value = formatCpf(urlDocument);
+            }
+
+            if (urlName && !nameInput.value) {
+                nameInput.value = urlName;
+            }
+
+            // Preencher CPF do localStorage
+            const cpfFromStorage = localStorage.getItem("cpfUsuario");
+            const nomeFromStorage = localStorage.getItem("nomeUsuario");
+            
+            if (cpfFromStorage && !docInput.value) {
+                docInput.value = formatCpf(cpfFromStorage);
+            }
+            
+            if (nomeFromStorage && !nameInput.value) {
+                nameInput.value = nomeFromStorage;
+            }
+            
+            fillMissingCustomerFieldsFromStorage();
+            if (initialCustomerDocument && !docInput.value) {
+                docInput.value = formatCpf(initialCustomerDocument);
+            } else {
+                docInput.value = formatCpf(docInput.value);
+            }
+            if (initialCustomerName && !nameInput.value) {
+                nameInput.value = initialCustomerName;
+            }
+            if (!validateCpf(currentCustomerDocument())) {
+                nameInput.value = '';
+                cpfForAutofilledName = '';
+                hideNameField();
+            } else if (validateName(nameInput.value)) {
+                showNameField();
+            } else {
+                hideNameFieldIfEmpty();
+            }
+
+            updateValidationState(emailInput, validateEmail);
+            updateValidationState(phoneInput, (v) => validatePhone(normalizePhoneDigits(v)));
+            updateValidationState(nameInput, validateName);
+            updateValidationState(docInput, validateCpf);
+            await hydrateNameFromCpf();
+            persistFunnelTracking();
+        });
+
+        const validateEmail = (email) => {
+            email = String(email || '').trim().toLowerCase();
+            return /^[^\s@]+@([a-z0-9-]+\.)+[a-z]{2,}$/i.test(email) && !email.includes('..');
+        };
+
+        const normalizePhoneDigits = (phone) => {
+            let digits = String(phone || '').replace(/\D/g, '');
+            if ((digits.length === 12 || digits.length === 13) && digits.startsWith('55')) {
+                digits = digits.slice(2);
+            }
+            if (digits.length > 11) {
+                digits = digits.slice(0, 11);
+            }
+            return digits;
+        };
+
+        const validatePhone = (phone) => {
+            const digits = normalizePhoneDigits(phone);
+            if (![10, 11].includes(digits.length)) return false;
+            if (/^(\d)\1+$/.test(digits)) return false;
+            const ddd = Number(digits.slice(0, 2));
+            const number = digits.slice(2);
+            const validBrazilianDdds = new Set([11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 24, 27, 28, 31, 32, 33, 34, 35, 37, 38, 41, 42, 43, 44, 45, 46, 47, 48, 49, 51, 53, 54, 55, 61, 62, 63, 64, 65, 66, 67, 68, 69, 71, 73, 74, 75, 77, 79, 81, 82, 83, 84, 85, 86, 87, 88, 89, 91, 92, 93, 94, 95, 96, 97, 98, 99]);
+            if (!validBrazilianDdds.has(ddd) || /^(\d)\1+$/.test(number)) return false;
+            if (digits.length === 11 && digits[2] !== '9') return false;
+            return true;
+        };
+
+        document.getElementById('generatePixBtn').addEventListener('click', async function() {
+            const btn = this;
+            btn.disabled = true;
+            btn.textContent = 'Gerando...';
+            
+            document.getElementById('ajaxLoader').classList.add('active');
+            
+            let currentName = currentCustomerName();
+            const currentDocument = currentCustomerDocument();
+            const email = emailInput.value.trim();
+            const phone = normalizePhoneDigits(phoneInput.value);
+            nameInput.classList.remove('input-error');
+            docInput.classList.remove('input-error');
+            emailInput.classList.remove('input-error');
+            phoneInput.classList.remove('input-error');
+            
+            if (!validateCpf(currentDocument)) {
+                docInput.classList.add('input-error');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'CPF invalido',
+                    text: 'Por favor, informe um CPF valido.',
+                    confirmButtonColor: '#e70036'
+                });
+                docInput.focus();
+                btn.disabled = false;
+                btn.textContent = 'Gerar Pix';
+                document.getElementById('ajaxLoader').classList.remove('active');
+                return;
+            }
+
+            if (!validateName(currentName)) {
+                await hydrateNameFromCpf();
+                currentName = currentCustomerName();
+            }
+
+            if (!validateName(currentName)) {
+                nameInput.classList.add('input-error');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Nome obrigatorio',
+                    text: 'Por favor, informe seu nome completo.',
+                    confirmButtonColor: '#e70036'
+                });
+                nameInput.focus();
+                btn.disabled = false;
+                btn.textContent = 'Gerar Pix';
+                document.getElementById('ajaxLoader').classList.remove('active');
+                return;
+            }
+            
+            if (!validateEmail(email)) {
+                emailInput.classList.add('input-error');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'E-mail inválido',
+                    text: 'Por favor, informe um e-mail válido.',
+                    confirmButtonColor: '#e70036'
+                });
+                emailInput.focus();
+                btn.disabled = false;
+                btn.textContent = 'Gerar Pix';
+                document.getElementById('ajaxLoader').classList.remove('active');
+                return;
+            }
+            
+            if (!validatePhone(phone)) {
+                phoneInput.classList.add('input-error');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Telefone inválido',
+                    text: 'Por favor, informe um telefone válido com DDD.',
+                    confirmButtonColor: '#e70036'
+                });
+                phoneInput.focus();
+                btn.disabled = false;
+                btn.textContent = 'Gerar Pix';
+                document.getElementById('ajaxLoader').classList.remove('active');
+                return;
+            }
+
+            try {
+                const payload = {
+                    name: currentName,
+                    document: currentDocument,
+                    email: email,
+                    telephone: phone,
+                    product_key: productKey,
+                    idempotency_key: getIdempotencyKey(currentDocument),
+                    tracking: trackingData
+                };
+                persistFunnelTracking();
+
+                const customResult = window.createPixWithCurrentApi
+                    ? await window.createPixWithCurrentApi(payload)
+                    : null;
+
+                document.dispatchEvent(new CustomEvent('checkout:generate-pix', { detail: payload }));
+
+                if (!customResult) {
+                    throw new Error('Integração Pix pendente.');
+                }
+                
+                document.getElementById('ajaxLoader').classList.remove('active');
+                
+                if (customResult.success) {
+                    chargeId = customResult.data.id;
+                    paymentStatusNonce = customResult.data.status_nonce || null;
+                    
+                    document.getElementById('pixCodeBox').textContent = customResult.data.brCode;
+                    
+                    const qrImg = document.getElementById('pixQrCodeImg');
+                    const qrSection = document.getElementById('pixQrCodeSection');
+                    
+                    if (customResult.data.pix && customResult.data.pix.qr_code && customResult.data.pix.qr_code.data_uri) {
+                        qrImg.src = customResult.data.pix.qr_code.data_uri;
+                        qrSection.style.display = 'flex';
+                    } else {
+                        qrSection.style.display = 'none';
+                    }
+
+                    document.getElementById('pixModal').classList.add('active');
+                    document.body.classList.add('modal-open');
+                    
+                    startTimer();
+                    startPaymentStatusPolling();
+                } else {
+                    let errMsg = customResult.error || 'Erro ao gerar PIX. Tente novamente.';
+                    const upstreamDetails = customResult.details && typeof customResult.details === 'object'
+                        ? customResult.details
+                        : {};
+                    if (upstreamDetails.message) {
+                        errMsg = upstreamDetails.message;
+                    }
+                    if (upstreamDetails.request_id) {
+                        errMsg += ' Protocolo: ' + upstreamDetails.request_id + '.';
+                    }
+                    if (upstreamDetails.details) {
+                        errMsg += ' Detalhes: ' + upstreamDetails.details;
+                    }
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Erro',
+                        text: errMsg,
+                        confirmButtonColor: '#e70036'
+                    });
+                    btn.disabled = false;
+                    btn.textContent = 'Gerar Pix';
+                }
+            } catch (error) {
+                document.getElementById('ajaxLoader').classList.remove('active');
+                console.error('Erro:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erro de conexão',
+                    text: error.message || 'Erro de conexão. Tente novamente.',
+                    confirmButtonColor: '#e70036'
+                });
+                btn.disabled = false;
+                btn.textContent = 'Gerar Pix';
+            }
+        });
+        
+        function copyPixCode() {
+            const pixCode = document.getElementById('pixCodeBox').textContent;
+            navigator.clipboard.writeText(pixCode).then(() => {
+                const btn = document.getElementById('pixCopyBtn');
+                btn.innerHTML = '<i class="fa fa-check"></i> COPIADO!';
+                btn.classList.add('copied');
+                
+                setTimeout(() => {
+                    btn.innerHTML = '<i class="fa fa-clone"></i> COPIAR CÓDIGO';
+                    btn.classList.remove('copied');
+                }, 2000);
+            });
+        }
+        
+        function startTimer() {
+            let timeLeft = 10 * 60;
+            
+            timerInterval = setInterval(() => {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                document.getElementById('pixTimer').textContent = 
+                    String(minutes).padStart(2, '0') + ':' + String(seconds).padStart(2, '0');
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    clearInterval(paymentStatusInterval);
+                    document.getElementById('pixModal').classList.remove('active');
+                    document.body.classList.remove('modal-open');
+                    location.reload();
+                }
+                
+                timeLeft--;
+            }, 1000);
+        }
+
+        function startPaymentStatusPolling() {
+            if (!chargeId || !paymentStatusNonce || paymentStatusInterval) {
+                return;
+            }
+
+            const checkStatus = async () => {
+                try {
+                    console.log('[Polling] Verificando status automaticamente:', chargeId);
+                    const response = await fetch(paymentStatusUrl(), {
+                        headers: { 'Accept': 'application/json' }
+                    });
+                    const result = await response.json();
+                    console.log('[Polling] Resposta:', result);
+                    
+                    if (result.success && result.status) {
+                        const status = result.status.toLowerCase();
+                        console.log('[Polling] Status do pagamento:', status);
+                        
+                        if (status === 'paid' || status === 'approved' || status === 'completed') {
+                            clearInterval(paymentStatusInterval);
+                            clearInterval(timerInterval);
+                            paymentStatusInterval = null;
+                            
+                            // Captura parâmetros UTM da URL atual
+                            const currentParams = new URLSearchParams(window.location.search);
+                            const upsellUrl = `../upsell1/index.html?${currentParams.toString()}`;
+                            
+                            console.log('[Polling] Pagamento aprovado! Redirecionando para:', upsellUrl);
+                            showSuccess(upsellUrl);
+                        }
+                    }
+                } catch (error) {
+                    console.error('[Polling] Erro ao verificar status:', error);
+                }
+            };
+
+            checkStatus();
+            paymentStatusInterval = setInterval(checkStatus, 2000); // Verifica a cada 2 segundos
+        }
+        
+        function toggleAccordion(header) {
+            header.classList.toggle('active');
+            const content = header.nextElementSibling;
+            content.classList.toggle('active');
+            
+            const icon = header.querySelector('i');
+            if (content.classList.contains('active')) {
+                icon.className = 'fa fa-chevron-up';
+            } else {
+                icon.className = 'fa fa-chevron-down';
+            }
+        }
+        
+        function showSuccess(thankYouUrl) {
+            document.getElementById('pixModal').classList.remove('active');
+            document.body.classList.remove('modal-open');
+            document.getElementById('successModal').classList.add('active');
+            if (thankYouUrl) {
+                setTimeout(() => {
+                    window.location.href = thankYouUrl;
+                }, 1500);
+            }
+        }
+
+        async function checkManualPayment() {
+            const btn = document.getElementById('pixCheckBtn');
+            if (!chargeId || !paymentStatusNonce) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Dados pendentes',
+                    text: 'Aguarde o carregamento do Pix ou tente gerar um novo código.',
+                    confirmButtonColor: '#e30613'
+                });
+                return;
+            }
+            
+            const originalContent = btn.innerHTML;
+            btn.classList.add('loading');
+            btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> VERIFICANDO...';
+            
+            try {
+                console.log('[Verificação] Verificando status do pagamento:', chargeId);
+                const response = await fetch(paymentStatusUrl(), {
+                    headers: { 'Accept': 'application/json' }
+                });
+                const result = await response.json();
+                console.log('[Verificação] Resposta:', result);
+                
+                if (result.success && result.status) {
+                    const status = result.status.toLowerCase();
+                    console.log('[Verificação] Status do pagamento:', status);
+                    
+                    if (status === 'paid' || status === 'approved' || status === 'completed') {
+                        clearInterval(paymentStatusInterval);
+                        clearInterval(timerInterval);
+                        
+                        // Captura parâmetros UTM da URL atual
+                        const currentParams = new URLSearchParams(window.location.search);
+                        const upsellUrl = `../upsell1/index.html?${currentParams.toString()}`;
+                        
+                        console.log('[Verificação] Pagamento aprovado! Redirecionando para:', upsellUrl);
+                        showSuccess(upsellUrl);
+                    } else {
+                        Swal.fire({
+                            icon: 'info',
+                            title: 'Aguardando Pagamento',
+                            text: 'Ainda não detectamos o seu pagamento. Se você já pagou, aguarde alguns segundos e tente novamente.',
+                            confirmButtonColor: '#e30613',
+                            confirmButtonText: 'Entendido'
+                        });
+                        btn.classList.remove('loading');
+                        btn.innerHTML = originalContent;
+                    }
+                } else {
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Aguardando Pagamento',
+                        text: 'Ainda não detectamos o seu pagamento. Se você já pagou, aguarde alguns segundos e tente novamente.',
+                        confirmButtonColor: '#e30613',
+                        confirmButtonText: 'Entendido'
+                    });
+                    btn.classList.remove('loading');
+                    btn.innerHTML = originalContent;
+                }
+            } catch (error) {
+                btn.classList.remove('loading');
+                btn.innerHTML = originalContent;
+                console.error('[Verificação] Erro:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erro de conexão',
+                    text: 'Não foi possível conectar ao servidor. Verifique sua internet.',
+                    confirmButtonColor: '#e30613'
+                });
+            }
+        }
+
+    </script>
+
+
+</body></html>

