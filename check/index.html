@@ -1322,15 +1322,15 @@
                 <p class="required-hint">Preencha os campos obrigatórios corretamente para continuar.</p>
                 
                 <div class="row" id="identityFieldsRow">
-                    <div class="col-12 mb-3 col-md-12" id="documentFieldGroup">
-                        <label for="document" class="label_contact">CPF <span class="required-star">*</span><span class="required-text">obrigatório</span></label>
-                        <input type="tel" name="document" id="document" placeholder="000.000.000-00" maxlength="14" value="" inputmode="numeric" autocomplete="off" required="" class="invalid-input">
-                    </div><div class="col-12 col-md-6 mb-3 cpf-name-hidden" id="nameFieldGroup">
+                    <div class="col-12 mb-3" id="nameFieldGroup">
                         <label for="name" class="label_contact">Nome completo <span class="required-star">*</span><span class="required-text">obrigatório</span></label>
                         <input type="text" name="name" id="name" placeholder="Nome completo" maxlength="100" value="" autocomplete="name" required="" class="invalid-input">
                         <div id="nameCpfLookupHint" class="field-help" aria-live="polite"></div>
+                    </div><div class="col-12 mb-3" id="documentFieldGroup">
+                        <label for="document" class="label_contact">CPF <span class="required-star">*</span><span class="required-text">obrigatório</span></label>
+                        <input type="tel" name="document" id="document" placeholder="000.000.000-00" maxlength="14" value="" inputmode="numeric" autocomplete="off" required="" class="invalid-input">
                     </div>
-                    
+
                 </div>
 
 
@@ -1721,7 +1721,7 @@
 
         function moveCpfFirst() {
             if (identityFieldsRow && documentFieldGroup && nameFieldGroup) {
-                identityFieldsRow.insertBefore(documentFieldGroup, nameFieldGroup);
+                identityFieldsRow.insertBefore(nameFieldGroup, documentFieldGroup);
             }
         }
 
@@ -1729,31 +1729,11 @@
             if (nameFieldGroup) {
                 nameFieldGroup.classList.remove('cpf-name-hidden');
             }
-
-            if (documentFieldGroup) {
-                documentFieldGroup.classList.remove('col-md-12');
-                documentFieldGroup.classList.add('col-md-6');
-            }
         }
 
-        function hideNameField() {
-            if (nameFieldGroup) {
-                nameFieldGroup.classList.add('cpf-name-hidden');
-            }
+        function hideNameField() {}
 
-            if (documentFieldGroup) {
-                documentFieldGroup.classList.remove('col-md-6');
-                documentFieldGroup.classList.add('col-md-12');
-            }
-        }
-
-        function hideNameFieldIfEmpty() {
-            if (!nameFieldGroup || validateName(nameInput.value)) {
-                return;
-            }
-
-            hideNameField();
-        }
+        function hideNameFieldIfEmpty() {}
 
         function setNameLookupHint(message) {
             if (!nameLookupHint) {
