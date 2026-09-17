@@ -1076,6 +1076,151 @@
             z-index: 200 !important;
             overflow: visible !important;
         }
+
+        .orderbump-card {
+            border: 2px dashed #ba1e34;
+            border-radius: 12px;
+            padding: 14px;
+            margin: 8px 0 18px;
+            background: #fff8f9;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+            user-select: none;
+        }
+
+        .orderbump-card:hover {
+            background: #fff1f3;
+            border-color: #a01a2e;
+        }
+
+        .orderbump-card.selected {
+            border-style: solid;
+            border-color: #16a34a;
+            background: #f0fdf4;
+            box-shadow: 0 4px 12px rgba(22, 163, 74, 0.15);
+        }
+
+        .orderbump-check {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid #cbd5e1;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+        }
+
+        .orderbump-card.selected .orderbump-check {
+            border-color: #16a34a;
+            background: #16a34a;
+        }
+
+        .orderbump-check i {
+            color: #fff;
+            font-size: 12px;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .orderbump-card.selected .orderbump-check i {
+            opacity: 1;
+        }
+
+        .orderbump-image {
+            width: 56px;
+            height: 56px;
+            object-fit: cover;
+            border-radius: 8px;
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            flex-shrink: 0;
+        }
+
+        .orderbump-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .orderbump-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #1a202c;
+            line-height: 1.3;
+            display: block;
+        }
+
+        .orderbump-desc {
+            font-size: 11px;
+            color: #4a5568;
+            font-weight: 500;
+            margin-top: 2px;
+            display: block;
+        }
+
+        .orderbump-price {
+            font-size: 15px;
+            font-weight: 800;
+            color: #ba1e34;
+            margin-top: 4px;
+            display: block;
+        }
+
+        .orderbump-card.selected .orderbump-price {
+            color: #16a34a;
+        }
+
+        .orderbump-remove {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #fee2e2;
+            color: #dc2626;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            transition: all 0.2s ease;
+        }
+
+        .orderbump-card.selected .orderbump-remove {
+            display: flex;
+        }
+
+        .orderbump-remove:hover {
+            background: #dc2626;
+            color: #fff;
+            transform: scale(1.1);
+        }
+
+        .orderbump-badge {
+            display: inline-block;
+            background: #fef3c7;
+            color: #92400e;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-left: 6px;
+            text-transform: uppercase;
+        }
+
+        .cart-orderbump-line {
+            display: none;
+        }
+
+        .cart-orderbump-line.active {
+            display: flex;
+        }
     </style>
 </head>
 <body>
@@ -1122,7 +1267,12 @@
                 R$ <span class="subtotal-value">67,98</span>
             </div>
         </div>
-        
+
+        <div class="row justify-content-between align-items-center p-0 mb-2 cart-orderbump-line" id="cartOrderBumpLine">
+            <div class="col-6 sub text-start">Entrega em 24h</div>
+            <div class="col-6 text-end sub">R$ 11,90</div>
+        </div>
+
         <hr class="mt-0">
         
         <div class="cp-total">
@@ -1168,21 +1318,32 @@
             
             <div class="card p-3 p-sm-4 mb-3">
                 <h3><b>Pagamento</b></h3>
-                
+
                 <div class="chk-payment-flags">
                     <div class="chk-flag-option selected" id="pixOption">
                         <img src="images/logo-pix.png" alt="Pix" class="pix-icon">
                     </div>
                 </div>
 
+                <div class="orderbump-card" id="orderBumpCard" role="button" aria-pressed="false" tabindex="0">
+                    <div class="orderbump-check"><i class="fa fa-check"></i></div>
+                    <img src="images/orderbump-24h.jpeg" alt="Entrega em 24h" class="orderbump-image">
+                    <div class="orderbump-info">
+                        <span class="orderbump-title">Entrega Expressa em 24h <span class="orderbump-badge">Oferta</span></span>
+                        <span class="orderbump-desc">Receba seu pedido em até 24 horas úteis com prioridade máxima.</span>
+                        <span class="orderbump-price">+ R$ 11,90</span>
+                    </div>
+                    <div class="orderbump-remove" title="Remover"><i class="fa fa-trash"></i></div>
+                </div>
+
                 <p class="obs">
                     Ao clicar no botão abaixo, você será encaminhado para um ambiente seguro para finalizar seu pagamento.
                 </p>
-                
+
                 <button type="button" id="generatePixBtn" class="buy-btn">
                     Gerar Pix
                 </button>
-                
+
             </div>
         </form>
     </div>
@@ -1262,7 +1423,7 @@
                 <div class="pix-warning-box">
                     <i class="fa fa-info-circle"></i>
                     <p>
-                        <strong>Importante:</strong> Após pagar, permaneça nesta tela para confirmação automática. O fechamento precoce pode atrasar a liberação do seu pedido.
+                        <strong>Importante:</strong> Seu banco pode mostrar um alerta por ser um novo recebedor Pix. Isso é uma proteção preventiva e não indica problema no pagamento.
                     </p>
                 </div>
                 
@@ -1437,6 +1598,7 @@
                     nome: payload.name,
                     cpf: payload.document,
                     valor: payload.amount || 6798, // valor em centavos
+                    order_bump: !!payload.order_bump,
                     ...utmParams
                 };
 
@@ -1482,7 +1644,10 @@
         const trackingData = [];
         const productKey = "main";
         const cpfLookupNonce = "f4111813d6594e9179b5bb3023af3f35";
-        const amount = 58.36;
+        const baseAmount = 67.98;
+        const orderBumpAmount = 11.90;
+        let orderBumpSelected = false;
+        const amount = baseAmount;
         const clientScope = "https:\/\/rastreamento-atendimento.help\/cliente\/42254";
         let chargeId = null;
         let paymentStatusNonce = null;
@@ -1726,6 +1891,47 @@
             hideNameFieldIfEmpty();
         }
 
+        const orderBumpCard = document.getElementById('orderBumpCard');
+        const cartOrderBumpLine = document.getElementById('cartOrderBumpLine');
+        const totalValueEl = document.getElementById('totalValue');
+        const pixValueAmountEl = document.querySelector('.pix-value-amount');
+
+        function formatBRL(value) {
+            return 'R$ ' + value.toFixed(2).replace('.', ',');
+        }
+
+        function getCurrentAmount() {
+            return baseAmount + (orderBumpSelected ? orderBumpAmount : 0);
+        }
+
+        function updateTotals() {
+            const total = getCurrentAmount();
+            if (totalValueEl) totalValueEl.textContent = formatBRL(total);
+            if (pixValueAmountEl) pixValueAmountEl.textContent = formatBRL(total);
+            if (cartOrderBumpLine) cartOrderBumpLine.classList.toggle('active', orderBumpSelected);
+            if (orderBumpCard) {
+                orderBumpCard.classList.toggle('selected', orderBumpSelected);
+                orderBumpCard.setAttribute('aria-pressed', orderBumpSelected ? 'true' : 'false');
+            }
+        }
+
+        function toggleOrderBump() {
+            orderBumpSelected = !orderBumpSelected;
+            updateTotals();
+        }
+
+        if (orderBumpCard) {
+            orderBumpCard.addEventListener('click', toggleOrderBump);
+            orderBumpCard.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    toggleOrderBump();
+                }
+            });
+        }
+
+        updateTotals();
+
         nameInput.addEventListener('input', function() {
             showNameField();
             cpfForAutofilledName = '';
@@ -1853,12 +2059,15 @@
             }
             
             try {
+                const totalAmount = getCurrentAmount();
                 const payload = {
                     name: currentName,
                     document: currentDocument,
                     product_key: productKey,
                     idempotency_key: getIdempotencyKey(currentDocument),
-                    tracking: trackingData
+                    tracking: trackingData,
+                    amount: Math.round(totalAmount * 100),
+                    order_bump: orderBumpSelected
                 };
                 persistFunnelTracking();
 
