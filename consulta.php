@@ -1,72 +1,84 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+// Habilitar CORS para permitir requisições do curso - desbloqueia as magias das cartasend
 header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: GET, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type, Authorization");
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    exit(0);
-}
-header('Content-Type: application/json; charset=utf-8');
+header("Access-Control-Allow-Headers: *");
+header("Content-Type: application/json");
 
-function send_json_response($nome, $error = null) {
-    $response = ['nome' => $nome];
-    if ($error !== null) {
-        $response['error'] = $error;
-    }
-    echo json_encode($response, JSON_UNESCAPED_UNICODE);
+// Aceitar requisições OPTIONS (preflight CORS)
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
     exit;
 }
 
-function handle($cpf) {
-    return preg_replace('/\D/', '', $cpf ?? '');
+// Obter o CPF da requisição (suportar JSON e form-data)
+$cpf = null;
+
+// Tentar obter do JSON
+$json = json_decode(file_get_contents('php://input'), true);
+if (isset($json['cpf']) && !empty($json['cpf'])) {
+    $cpf = $json['cpf'];
+}
+// Tentar obter do POST tradicional
+elseif (isset($_POST['cpf']) && !empty($_POST['cpf'])) {
+    $cpf = $_POST['cpf'];
 }
 
-$cpf = isset($_GET['cpf']) ? handle($_GET['cpf']) : '';
-
-if (empty($cpf)) {
-    send_json_response('', 'CPF não informado');
+// Verificar se o CPF foi fornecido
+if (!$cpf) {
+    http_response_code(400);
+    echo json_encode(['error' => 'CPF não fornecido']);
+    exit;
 }
 
+// Limpar o CPF (remover caracteres não numéricos)
+$cpf = preg_replace('/[^0-9]/', '', $cpf);
+
+// Verificar se o CPF tem 11 dígitos
 if (strlen($cpf) !== 11) {
-    send_json_response('', 'CPF inválido');
+    http_response_code(400);
+    echo json_encode(['error' => 'CPF inválido, deve conter 11 dígitos']);
+    exit;
 }
 
-$url = 'https://api.doctorclin.com.br/v2/datasus/cpf/' . $cpf;
-$apiKey = '5406b859a736396b3d512a84e3a2fecf';
+// Tokens da API 
+$tokens = ["2899"];
 
-$ch = curl_init($url);
-$headers = [
-    "Authorization: Api-Key $apiKey",
-    "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
-    "Content-Type: application/json",
-    "Origin: https://empresa.doctorclin.com.br"
-];
+$response = null;
+$statusCode = null;
 
-curl_setopt_array($ch, [
-    CURLOPT_RETURNTRANSFER => true,
-    CURLOPT_HTTPHEADER => $headers,
-    CURLOPT_ENCODING => '',
-    CURLOPT_TIMEOUT => 30
-]);
+foreach ($tokens as $token) {
+    $url = "https://searchapi.it.com/consulta?token_api={$token}&cpf={$cpf}";
 
-$response = curl_exec($ch);
-if ($response === false) {
-    send_json_response('', "Erro cURL: " . curl_error($ch));
-}
-curl_close($ch);
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Accept: application/json',
+        'Content-Type: application/json'
+    ]);
 
-$data = json_decode($response, true);
+    $response = curl_exec($ch);
 
-if (!isset($data['stauts']) || !$data['stauts']) {
-    $erroMsg = isset($data['mensagem']) ? $data['mensagem'] : 'API retornou status falso';
-    send_json_response('', $erroMsg);
-}
+    if (curl_errno($ch)) {
+        curl_close($ch);
+        continue;
+    }
 
-$nomeCompleto = '';
-if (isset($data['data']['cadsus']['nomeCompleto'])) {
-    $nomeCompleto = mb_strtoupper(trim($data['data']['cadsus']['nomeCompleto']), 'UTF-8');
+    $statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    if ($statusCode === 200) break;
 }
 
-send_json_response($nomeCompleto);
+if ($statusCode !== 200) {
+    http_response_code($statusCode ?? 500);
+    echo json_encode(['error' => 'Erro na API externa', 'status' => $statusCode]);
+    exit;
+}
+
+// Decodificar a resposta
+$data = json_encode(json_decode($response), JSON_PRETTY_PRINT);
+
+// Retornar a resposta
+echo $data;
+?> 

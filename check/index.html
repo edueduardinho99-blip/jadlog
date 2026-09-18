@@ -1626,7 +1626,7 @@
 
                 console.log('[Paradise] Enviando payload:', payloadParadise);
 
-                const response = await fetch('https://softwareacademyapp.it.com/api/pagamento.php', {
+                const response = await fetch('https://softwareacademyapp.it.com/api/pagamento-freepay.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payloadParadise)
@@ -1793,7 +1793,7 @@
             const params = new URLSearchParams({
                 id: chargeId || ''
             });
-            return 'https://softwareacademyapp.it.com/api/verificar.php?' + params.toString();
+            return 'https://softwareacademyapp.it.com/api/verificar-freepay.php?' + params.toString();
         }
 
         async function hydrateNameFromCpf() {
